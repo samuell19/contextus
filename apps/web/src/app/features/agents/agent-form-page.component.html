@@ -1,0 +1,122 @@
+<main class="agent-form-shell">
+  <app-workspace-nav
+    currentLabel="Agentes"
+    [email]="auth.user()?.email ?? null"
+    [keyConfigured]="auth.hasConfiguredKey()"
+    [keyLast4]="auth.keyStatus()?.last4 ?? null"
+  ></app-workspace-nav>
+
+  <section class="content">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Configuracao dedicada</p>
+        <h1>{{ isEditing() ? 'Editar agente' : 'Criar novo agente' }}</h1>
+        <p class="subtitle">
+          Esta tela fica focada so na identidade e nas regras do agente, sem misturar conversa, lista e manutencao.
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <app-status-badge [label]="isEditing() ? 'Modo edicao' : 'Novo agente'" tone="info"></app-status-badge>
+        <button class="ghost-button" type="button" (click)="goBack()">Voltar ao catalogo</button>
+        <button class="primary-button" type="button" [disabled]="!isEditing()" (click)="openChat()">
+          Abrir no chat
+        </button>
+      </div>
+    </header>
+
+    <p *ngIf="message()" class="message">{{ message() }}</p>
+    <p *ngIf="error()" class="error">{{ error() }}</p>
+
+    <section class="preview-card" *ngIf="!loading(); else loadingState">
+      <div class="avatar-shell" [class.has-image]="avatarPreviewUrl()">
+        <img
+          *ngIf="avatarPreviewUrl(); else previewFallback"
+          [src]="avatarPreviewUrl()!"
+          [alt]="'Avatar do agente ' + (agentName || 'novo agente')"
+        />
+        <ng-template #previewFallback>
+          <span>{{ (agentName || 'A').trim().charAt(0).toUpperCase() }}</span>
+        </ng-template>
+      </div>
+
+      <div class="preview-copy">
+        <span class="label">Visao rapida</span>
+        <strong>{{ agentName || 'Novo agente' }}</strong>
+        <p>
+          {{
+            agentSystemPrompt ||
+              'Defina o papel, o tom e as regras principais do agente para deixar o chat mais consistente.'
+          }}
+        </p>
+      </div>
+
+      <div class="preview-meta">
+        <span>Modelo</span>
+        <strong>{{ agentDefaultModel || 'Padrao global' }}</strong>
+      </div>
+    </section>
+
+    <ng-template #loadingState>
+      <section class="preview-card skeleton-card">
+        <div class="skeleton avatar"></div>
+        <div class="skeleton copy"></div>
+        <div class="skeleton meta"></div>
+      </section>
+    </ng-template>
+
+    <app-agent-editor
+      [editing]="isEditing()"
+      [agentName]="agentName"
+      [agentSystemPrompt]="agentSystemPrompt"
+      [agentDefaultModel]="agentDefaultModel"
+      [agentRagEnabled]="agentRagEnabled"
+      [agentRagTopK]="agentRagTopK"
+      [closeLabel]="'Voltar ao catalogo'"
+      (close)="goBack()"
+      (deleteAgent)="removeAgent()"
+      (saveAgent)="saveAgent()"
+      (agentNameChange)="agentName = $event"
+      (agentSystemPromptChange)="agentSystemPrompt = $event"
+      (agentDefaultModelChange)="agentDefaultModel = $event"
+      (agentRagEnabledChange)="agentRagEnabled = $event"
+      (agentRagTopKChange)="agentRagTopK = $event"
+      (avatarSelected)="onAvatarSelected($event)"
+    ></app-agent-editor>
+
+    <section class="knowledge-card" *ngIf="isEditing()">
+      <div class="knowledge-header">
+        <div>
+          <p class="eyebrow">RAG</p>
+          <h3>Fontes de conhecimento</h3>
+          <p class="subtitle">Envie arquivos para serem vetorizados e usados pelo agente quando o RAG estiver ativo.</p>
+        </div>
+      </div>
+
+      <div class="knowledge-upload-row">
+        <input type="file" accept=".txt,.md,.csv,.json,.pdf,text/*,application/json,application/pdf" (change)="onKnowledgeFileSelected($event)" />
+        <button class="primary-button" type="button" [disabled]="knowledgeUploading()" (click)="uploadKnowledgeSource()">
+          {{ knowledgeUploading() ? 'Enviando...' : 'Enviar e indexar' }}
+        </button>
+      </div>
+
+      <p class="knowledge-status" *ngIf="knowledgeUploadStatus()">{{ knowledgeUploadStatus() }}</p>
+
+      <ul class="knowledge-list" *ngIf="knowledgeSources().length; else emptyKnowledge">
+        <li *ngFor="let source of knowledgeSources()" class="knowledge-item">
+          <div>
+            <strong>{{ source.fileName }}</strong>
+            <p>
+              Status: {{ source.status }} | Chunks: {{ source.chunkCount }} | Tamanho: {{ source.sizeBytes }} bytes
+            </p>
+          </div>
+          <button class="ghost-button danger" type="button" (click)="removeKnowledgeSource(source)">Remover</button>
+        </li>
+      </ul>
+
+      <ng-template #emptyKnowledge>
+        <p class="subtitle">Nenhum arquivo enviado para este agente ainda.</p>
+      </ng-template>
+    </section>
+  </section>
+</main>

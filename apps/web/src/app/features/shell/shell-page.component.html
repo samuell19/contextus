@@ -1,0 +1,37 @@
+<main class="shell">
+  <app-session-sidebar
+    [hasAgents]="agents().length > 0"
+    [selectedAgentName]="selectedAgent()?.name ?? null"
+    [selectedAgentId]="selectedAgentId()"
+    [sessions]="sessions()"
+    [selectedSessionId]="selectedSessionId()"
+    [email]="auth.user()?.email ?? null"
+    [keyConfigured]="auth.hasConfiguredKey()"
+    [keyLast4]="auth.keyStatus()?.last4 ?? null"
+    (createSession)="createSession()"
+    (selectSession)="goToSession($event)"
+    (renameSession)="renameSession($event)"
+    (deleteSession)="deleteSession($event)"
+    (openProfile)="openProfileSettings()"
+    (openApiKeys)="openApiKeySettings()"
+    (logout)="logout()"
+  ></app-session-sidebar>
+
+  <div class="content-stack">
+    <app-chat-panel
+      [selectedAgentName]="selectedAgent()?.name ?? null"
+      [selectedSessionTitle]="selectedSession()?.title ?? null"
+      [keyLast4]="auth.keyStatus()?.last4 ?? null"
+      [chatStatusLabel]="chatStatusLabel()"
+      [chatStatusTone]="chatStatusTone()"
+      [messages]="messages()"
+      [draft]="messageDraft"
+      [streaming]="streaming()"
+      [error]="error()"
+      [hasAgent]="selectedAgentId() !== null"
+      [hasAgents]="agents().length > 0"
+      (draftChange)="updateDraft($event)"
+      (send)="sendMessage()"
+    ></app-chat-panel>
+  </div>
+</main>

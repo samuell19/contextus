@@ -1,0 +1,150 @@
+.agents-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(240px, 280px) minmax(260px, 320px) minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px;
+}
+
+.content {
+  min-width: 0;
+  border: 1px solid var(--stroke);
+  border-radius: 30px;
+  background: linear-gradient(180deg, rgba(10, 15, 27, 0.9), rgba(9, 14, 24, 0.72));
+  box-shadow: var(--shadow);
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.content-header,
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: #c4b5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 3vw, 3rem);
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+.header-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.primary-link {
+  border: 0;
+  border-radius: 18px;
+  padding: 13px 16px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: white;
+  font-weight: 700;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.summary-card,
+.guide-card {
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 24px;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.summary-card {
+  padding: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.summary-card span {
+  color: var(--muted);
+  font-size: 0.84rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.summary-card strong {
+  font-size: 1.05rem;
+}
+
+.summary-card small {
+  color: var(--muted-strong);
+}
+
+.guide-card {
+  padding: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.guide-card p:last-child {
+  color: var(--muted);
+}
+
+.message,
+.error {
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-weight: 500;
+}
+
+.message {
+  color: #bbf7d0;
+  background: rgba(20, 44, 33, 0.72);
+  border: 1px solid rgba(34, 197, 94, 0.12);
+}
+
+.error {
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.16);
+}
+
+@media (max-width: 1320px) {
+  .agents-shell {
+    grid-template-columns: 280px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1120px) {
+  .agents-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .content-header,
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}

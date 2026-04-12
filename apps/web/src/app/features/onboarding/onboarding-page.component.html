@@ -1,0 +1,57 @@
+<main class="page-shell">
+  <section class="hero-card">
+    <p class="eyebrow">Onboarding</p>
+    <h1>Conecte sua chave e libere o fluxo completo do seu workspace multiagente.</h1>
+    <p class="copy">
+      A API key será usada para chamadas ao OpenRouter, respostas em streaming e atualização da
+      memória persistente por agente e por sessão.
+    </p>
+
+    <div class="feature-list">
+      <article>
+        <strong>Chave criptografada</strong>
+        <span>Se o usuário salvar manualmente, ela fica protegida no backend.</span>
+      </article>
+      <article>
+        <strong>Resposta em tempo real</strong>
+        <span>O chat já está preparado para streaming e evolução para tools.</span>
+      </article>
+      <article>
+        <strong>Persistência pronta</strong>
+        <span>As conversas e resumos ficam disponíveis para interações futuras.</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="form-card">
+    <div class="header">
+      <div>
+        <p class="eyebrow">OpenRouter</p>
+        <h2>Adicionar API key</h2>
+      </div>
+      <app-status-badge
+        [label]="auth.hasConfiguredKey() ? 'Chave conectada' : 'Aguardando chave'"
+        [tone]="auth.hasConfiguredKey() ? 'success' : 'warning'"
+      ></app-status-badge>
+    </div>
+
+    <p class="muted">
+      Se quiser trocar a chave depois, essa configuração também fica disponível na tela de
+      configurações.
+    </p>
+
+    <label>
+      <span>API key</span>
+      <textarea [(ngModel)]="apiKey" rows="7" placeholder="sk-or-v1-..."></textarea>
+    </label>
+
+    <p *ngIf="error()" class="error">{{ error() }}</p>
+
+    <div class="actions">
+      <button class="ghost-button" routerLink="/auth" type="button">Voltar</button>
+      <button class="primary-button" [disabled]="busy()" type="button" (click)="saveKey()">
+        {{ busy() ? 'Salvando...' : 'Salvar e entrar na plataforma' }}
+      </button>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,52 @@
+<aside class="sidebar">
+  <div class="brand-card">
+    <div>
+      <p class="eyebrow">Workspace</p>
+      <h2>{{ title }}</h2>
+    </div>
+    <button class="icon-button" type="button" (click)="createAgent.emit()">+</button>
+  </div>
+
+  <section *ngIf="showAccountCard" class="account-card">
+    <div class="account-copy">
+      <span class="label">Usuário conectado</span>
+      <strong>{{ email || 'Sem sessão' }}</strong>
+    </div>
+    <app-status-badge
+      [label]="keyConfigured ? 'OpenRouter ativo' : 'OpenRouter pendente'"
+      [tone]="keyConfigured ? 'success' : 'warning'"
+    ></app-status-badge>
+    <p *ngIf="keyConfigured && keyLast4" class="key-copy">Chave atual terminando em {{ keyLast4 }}</p>
+  </section>
+
+  <div class="section-head">
+    <p class="eyebrow">{{ subtitle }}</p>
+    <button class="ghost-button" type="button" (click)="createAgent.emit()">Novo agente</button>
+  </div>
+
+  <div class="list">
+    <button
+      *ngFor="let agent of agents; trackBy: trackById"
+      class="agent-card"
+      [class.active]="agent.id === selectedAgentId"
+      type="button"
+      (click)="selectAgent.emit(agent.id)"
+    >
+      <div class="avatar">
+        <img *ngIf="avatarUrls[agent.id]" [src]="avatarUrls[agent.id]" [alt]="agent.name" />
+        <span *ngIf="!avatarUrls[agent.id]">{{ agent.name.slice(0, 2).toUpperCase() }}</span>
+      </div>
+
+      <div class="agent-copy">
+        <strong>{{ agent.name }}</strong>
+        <small>{{ agent.defaultModelSlug || 'Modelo padrão do workspace' }}</small>
+      </div>
+    </button>
+
+    <div *ngIf="!agents.length" class="empty-card">
+      <strong>Nenhum agente criado</strong>
+      <p>Crie o primeiro agente para começar a conversar e organizar sessões.</p>
+    </div>
+  </div>
+
+</aside>

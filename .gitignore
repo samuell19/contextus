@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+.angular/
+.vscode/
+.idea/
+storage/
+tmp/
+*.log
+.env
+.env.local
+apps/api/tmp/

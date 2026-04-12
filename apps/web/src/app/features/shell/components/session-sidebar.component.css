@@ -1,0 +1,260 @@
+.sidebar {
+  min-height: 100%;
+  border: 1px solid var(--stroke);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(10, 15, 27, 0.88), rgba(9, 14, 24, 0.68));
+  box-shadow: var(--shadow);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sidebar-top,
+.section-head,
+.agent-summary,
+.account-trigger,
+.account-menu {
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 22px;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.sidebar-top,
+.section-head,
+.agent-summary {
+  padding: 16px;
+}
+
+.brand-row,
+.section-head,
+.agent-summary,
+.account-trigger {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+h2,
+p {
+  margin: 0;
+}
+
+h2 {
+  font-size: 1.1rem;
+}
+
+.catalog-link,
+.manage-link {
+  color: #bfdbfe;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.mini-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mini-nav a {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(10, 15, 27, 0.72);
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.mini-nav a.active {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.18), rgba(59, 130, 246, 0.16));
+  color: white;
+  box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.18);
+}
+
+.ghost-button,
+.icon-button {
+  border: 0;
+  border-radius: 16px;
+}
+
+.ghost-button {
+  padding: 10px 14px;
+  background: rgba(30, 41, 59, 0.78);
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.agent-copy {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.agent-label,
+.account-label {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+
+.list {
+  display: grid;
+  gap: 10px;
+}
+
+.session-card {
+  border: 1px solid transparent;
+  border-radius: 20px;
+  padding: 13px;
+  background: rgba(15, 23, 42, 0.42);
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.session-card.active {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.16), rgba(59, 130, 246, 0.14));
+  border-color: rgba(96, 165, 250, 0.2);
+}
+
+.session-copy {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.session-copy strong,
+.session-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-copy small {
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-button {
+  min-width: 38px;
+  padding: 10px;
+  background: rgba(30, 41, 59, 0.86);
+  color: var(--text-soft);
+  font-weight: 700;
+}
+
+.icon-button.danger {
+  color: #fecaca;
+}
+
+.empty-card {
+  border: 1px dashed rgba(148, 163, 184, 0.18);
+  border-radius: 20px;
+  padding: 18px;
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+}
+
+.account-shell {
+  margin-top: auto;
+  position: relative;
+}
+
+.account-trigger {
+  width: 100%;
+  padding: 14px;
+  border-radius: 22px;
+  text-align: left;
+  color: var(--text);
+}
+
+.account-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.32), rgba(6, 182, 212, 0.22));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+}
+
+.account-copy {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  gap: 4px;
+}
+
+.account-copy strong,
+.account-copy small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-copy small {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.chevron {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.account-menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+  width: min(220px, 100%);
+  padding: 8px;
+  display: grid;
+  gap: 4px;
+  box-shadow: 0 20px 48px rgba(2, 6, 23, 0.42);
+  z-index: 4;
+}
+
+.account-menu button {
+  border: 0;
+  border-radius: 14px;
+  padding: 11px 12px;
+  text-align: left;
+  background: transparent;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.account-menu button:hover {
+  background: rgba(30, 41, 59, 0.82);
+}
+
+.account-menu button.danger {
+  color: #fda4af;
+}

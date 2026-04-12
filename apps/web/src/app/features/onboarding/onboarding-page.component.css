@@ -1,0 +1,149 @@
+.page-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 460px);
+  gap: 24px;
+  padding: 28px;
+}
+
+.hero-card,
+.form-card {
+  border: 1px solid var(--stroke);
+  border-radius: 30px;
+  background: linear-gradient(180deg, rgba(10, 15, 27, 0.88), rgba(9, 14, 24, 0.72));
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+.hero-card {
+  padding: 38px;
+  display: grid;
+  gap: 24px;
+  align-content: start;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: #c4b5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  max-width: 12ch;
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.copy,
+.muted {
+  color: var(--muted);
+}
+
+.feature-list {
+  display: grid;
+  gap: 12px;
+}
+
+.feature-list article {
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.46);
+  border-radius: 20px;
+  padding: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.feature-list strong {
+  font-size: 1rem;
+}
+
+.feature-list span {
+  color: var(--muted);
+}
+
+.form-card {
+  padding: 28px;
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.header,
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+h2 {
+  font-size: 1.9rem;
+  letter-spacing: -0.04em;
+}
+
+label {
+  display: grid;
+  gap: 10px;
+}
+
+label span {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+textarea {
+  min-height: 190px;
+  border-radius: 20px;
+  padding: 16px;
+  resize: vertical;
+}
+
+.error {
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.16);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+.actions {
+  align-items: center;
+}
+
+.ghost-button,
+.primary-button {
+  border: 0;
+  border-radius: 18px;
+  padding: 14px 18px;
+  font-weight: 700;
+}
+
+.ghost-button {
+  background: rgba(30, 41, 59, 0.82);
+  color: var(--text-soft);
+}
+
+.primary-button {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: white;
+}
+
+@media (max-width: 1100px) {
+  .page-shell {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    max-width: none;
+  }
+}

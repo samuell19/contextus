@@ -1,0 +1,40 @@
+<aside class="nav-shell">
+  <div class="brand-card">
+    <p class="eyebrow">Plataforma IA</p>
+    <h2>{{ currentLabel }}</h2>
+    <p class="brand-copy">Automação, memória contextual e múltiplos agentes em um só workspace.</p>
+  </div>
+
+  <nav class="nav-card">
+    <a routerLink="/home" routerLinkActive="active" class="nav-link">
+      <span class="nav-title">Home</span>
+      <small>Sessões e chat</small>
+    </a>
+    <a routerLink="/agents" routerLinkActive="active" class="nav-link">
+      <span class="nav-title">Agentes</span>
+      <small>Catálogo e configuração</small>
+    </a>
+    <a routerLink="/settings" routerLinkActive="active" class="nav-link">
+      <span class="nav-title">Configurações</span>
+      <small>Conta e API keys</small>
+    </a>
+    <a routerLink="/metrics" routerLinkActive="active" class="nav-link">
+      <span class="nav-title">Métricas</span>
+      <small>RAG, latência e uso</small>
+    </a>
+  </nav>
+
+  <section class="status-card">
+    <div class="account-copy">
+      <span class="label">Usuário atual</span>
+      <strong>{{ email || 'Sem sessão' }}</strong>
+    </div>
+
+    <app-status-badge
+      [label]="keyConfigured ? 'OpenRouter conectado' : 'OpenRouter pendente'"
+      [tone]="keyConfigured ? 'success' : 'warning'"
+    ></app-status-badge>
+
+    <p class="hint" *ngIf="keyConfigured && keyLast4">Chave ativa terminando em {{ keyLast4 }}</p>
+  </section>
+</aside>

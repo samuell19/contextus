@@ -1,0 +1,76 @@
+<section class="workspace">
+  <header class="workspace-header">
+    <div class="title-block">
+      <p class="eyebrow">Chat</p>
+      <h1>{{ selectedSessionTitle || 'Converse com seu agente' }}</h1>
+      <p class="subtitle">
+        {{
+          selectedAgentName
+            ? 'Agente ativo: ' + selectedAgentName
+            : 'Selecione um agente e inicie uma sessão para começar'
+        }}
+      </p>
+    </div>
+
+    <div class="header-meta">
+      <app-status-badge [label]="chatStatusLabel" [tone]="chatStatusTone"></app-status-badge>
+      <span class="key-chip" *ngIf="keyLast4">OpenRouter •••• {{ keyLast4 }}</span>
+      <a class="ghost-button manage-link" routerLink="/agents">
+        Ver catalogo
+      </a>
+    </div>
+  </header>
+
+  <div class="chat-card">
+    <div class="messages">
+      <article
+        *ngFor="let message of messages; trackBy: trackById"
+        class="message"
+        [class.user]="message.role === 'user'"
+      >
+        <div class="message-meta">
+          <span>{{ message.role === 'user' ? 'Você' : 'Agente' }}</span>
+        </div>
+
+        <ng-container *ngIf="message.content; else typingState">
+          <div class="message-content" [innerHTML]="renderMessageContent(message)"></div>
+        </ng-container>
+
+        <ng-template #typingState>
+          <div class="typing" *ngIf="streaming && message.role === 'assistant'">
+            <i></i>
+            <i></i>
+            <i></i>
+          </div>
+        </ng-template>
+      </article>
+
+      <div *ngIf="!messages.length" class="empty-state">
+        <p class="eyebrow">MVP 1</p>
+        <h2>Seu hub de agentes está no ar</h2>
+        <p>
+          Crie um agente, abra uma sessão e acompanhe o fluxo de resposta em tempo real com memória
+          persistente e organização por contexto.
+        </p>
+        <a *ngIf="!hasAgents" class="empty-link" routerLink="/agents">Criar primeiro agente</a>
+      </div>
+    </div>
+
+    <div class="composer">
+      <textarea
+        [ngModel]="draft"
+        (ngModelChange)="handleDraftChange($event)"
+        rows="4"
+        [disabled]="streaming || !hasAgent"
+        placeholder="Digite a próxima instrução para o agente..."
+      ></textarea>
+
+      <div class="composer-footer">
+        <p *ngIf="error" class="error">{{ error }}</p>
+        <button class="primary-button" type="button" [disabled]="streaming || !hasAgent" (click)="send.emit()">
+          {{ streaming ? 'Respondendo...' : 'Enviar mensagem' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

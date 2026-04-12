@@ -1,0 +1,102 @@
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="brand-row">
+      <div>
+        <p class="eyebrow">Plataforma IA</p>
+        <h2>Workspace</h2>
+      </div>
+      <a routerLink="/agents" class="catalog-link">Agentes</a>
+    </div>
+
+    <nav class="mini-nav" aria-label="Atalhos">
+      <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Home</a>
+      <a routerLink="/agents" routerLinkActive="active">Agentes</a>
+    </nav>
+  </div>
+
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Sessoes</p>
+      <h2>{{ selectedAgentName || 'Nenhum agente aberto' }}</h2>
+    </div>
+    <button class="ghost-button" type="button" [disabled]="!selectedAgentId" (click)="createSession.emit()">
+      Nova
+    </button>
+  </div>
+
+  <div class="agent-summary" *ngIf="selectedAgentId; else emptySelection">
+    <div class="agent-copy">
+      <span class="agent-label">Agente ativo</span>
+      <strong>{{ selectedAgentName }}</strong>
+    </div>
+    <a routerLink="/agents" class="manage-link">Trocar</a>
+  </div>
+
+  <div *ngIf="selectedAgentId" class="list">
+    <article
+      *ngFor="let session of sessions; trackBy: trackById"
+      class="session-card"
+      [class.active]="session.id === selectedSessionId"
+      (click)="selectSession.emit(session)"
+    >
+      <div class="session-copy">
+        <strong>{{ session.title }}</strong>
+        <small>{{ formatDate(session.lastMessageAt || session.createdAt) }}</small>
+      </div>
+
+      <div class="actions">
+        <button class="icon-button" type="button" (click)="renameSession.emit(session); $event.stopPropagation()">
+          Edit
+        </button>
+        <button class="icon-button danger" type="button" (click)="deleteSession.emit(session); $event.stopPropagation()">
+          Del
+        </button>
+      </div>
+    </article>
+
+    <div *ngIf="!sessions.length" class="empty-card">
+      <strong>Sem sessoes ainda</strong>
+      <p>Abra uma nova conversa para comecar a construir o historico desse agente.</p>
+    </div>
+  </div>
+
+  <ng-template #emptySelection>
+    <div class="empty-card">
+      <strong>{{ hasAgents ? 'Escolha um agente no catalogo' : 'Nenhum agente criado ainda' }}</strong>
+      <p>
+        {{
+          hasAgents
+            ? 'Abra o catalogo de agentes e escolha um deles para entrar no fluxo de conversa.'
+            : 'Crie um agente primeiro para liberar sessoes e chat.'
+        }}
+      </p>
+      <a routerLink="/agents" class="manage-link">Abrir catalogo</a>
+    </div>
+  </ng-template>
+
+  <div class="account-shell">
+    <button class="account-trigger" type="button" (click)="toggleAccountMenu($event)">
+      <span class="account-avatar">{{ userInitial }}</span>
+
+      <span class="account-copy">
+        <span class="account-label">Conta</span>
+        <strong>{{ email || 'Sem sessao' }}</strong>
+        <small>
+                    {{
+            keyConfigured
+              ? 'OpenRouter conectado' + (keyLast4 ? ' / ' + keyLast4 : '')
+              : 'API key pendente'
+          }}
+        </small>
+      </span>
+
+      <span class="chevron">{{ accountMenuOpen ? '^' : 'v' }}</span>
+    </button>
+
+    <div class="account-menu" *ngIf="accountMenuOpen" (click)="$event.stopPropagation()">
+      <button type="button" (click)="handleProfileClick($event)">Editar perfil</button>
+      <button type="button" (click)="handleApiKeysClick($event)">API key</button>
+      <button class="danger" type="button" (click)="handleLogoutClick($event)">Sair</button>
+    </div>
+  </div>
+</aside>

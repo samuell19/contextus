@@ -1,0 +1,71 @@
+<main class="agents-shell">
+  <app-workspace-nav
+    currentLabel="Agentes"
+    [email]="auth.user()?.email ?? null"
+    [keyConfigured]="auth.hasConfiguredKey()"
+    [keyLast4]="auth.keyStatus()?.last4 ?? null"
+  ></app-workspace-nav>
+
+  <section class="content">
+    <header class="content-header">
+      <div>
+        <p class="eyebrow">Catalogo visual</p>
+        <h1>Escolha um agente para conversar</h1>
+        <p class="subtitle">
+          Cada agente vive em um card proprio, com menos ruido na tela e um fluxo mais claro entre explorar,
+          configurar e abrir o chat.
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <button class="primary-link" type="button" (click)="openCreateAgent()">Novo agente</button>
+      </div>
+    </header>
+
+    <section class="hero-card">
+      <article class="hero-metric">
+        <span>Total de agentes</span>
+        <strong>{{ agents().length }}</strong>
+        <small>Uma biblioteca separada reduz densidade de informacao e deixa a navegacao mais previsivel.</small>
+      </article>
+
+      <article class="hero-metric">
+        <span>Status da API key</span>
+        <strong>{{ auth.hasConfiguredKey() ? 'OpenRouter conectado' : 'OpenRouter pendente' }}</strong>
+        <small>
+          {{
+            auth.hasConfiguredKey() && auth.keyStatus()?.last4
+              ? 'Chave ativa terminando em ' + auth.keyStatus()!.last4
+              : 'Conecte a chave para liberar a experiencia completa do chat.'
+          }}
+        </small>
+      </article>
+    </section>
+
+    <p *ngIf="message()" class="message">{{ message() }}</p>
+    <p *ngIf="error()" class="error">{{ error() }}</p>
+
+    <div *ngIf="!agents().length" class="empty-state">
+      <p class="eyebrow">Primeiro passo</p>
+      <h2>Monte sua primeira identidade de agente</h2>
+      <p>
+        A home agora fica dedicada a sessoes e conversa. Aqui voce cuida do catalogo com mais calma e depois entra
+        no chat ja com um agente escolhido.
+      </p>
+      <button class="primary-link" type="button" (click)="openCreateAgent()">Criar primeiro agente</button>
+    </div>
+
+    <section *ngIf="agents().length" class="grid">
+      <app-agent-card
+        *ngFor="let agent of agents(); trackBy: trackById"
+        [agent]="agent"
+        [avatarUrl]="avatarUrls()[agent.id] ?? null"
+        [menuOpen]="menuAgentId() === agent.id"
+        (openChat)="openChat(agent.id)"
+        (toggleMenu)="toggleMenu(agent.id)"
+        (edit)="editAgent(agent.id)"
+        (delete)="removeAgent(agent)"
+      ></app-agent-card>
+    </section>
+  </section>
+</main>

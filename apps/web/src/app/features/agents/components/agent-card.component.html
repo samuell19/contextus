@@ -1,0 +1,30 @@
+<article class="card" (click)="openChat.emit()">
+  <button
+    class="menu-button"
+    type="button"
+    aria-label="Abrir acoes do agente"
+    (click)="toggleMenu.emit(); $event.stopPropagation()"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="avatar-shell" [class.has-image]="avatarUrl">
+    <img *ngIf="avatarUrl; else avatarFallback" [src]="avatarUrl" [alt]="'Avatar do agente ' + agent.name" />
+    <ng-template #avatarFallback>
+      <span>{{ initial }}</span>
+    </ng-template>
+  </div>
+
+  <div class="copy">
+    <h3>{{ agent.name }}</h3>
+    <p>{{ agent.systemPrompt || 'Agente pronto para receber contexto e conversar com o usuario.' }}</p>
+    <span class="model-chip">{{ agent.defaultModelSlug || 'Modelo global do workspace' }}</span>
+  </div>
+
+  <div class="menu" *ngIf="menuOpen" (click)="$event.stopPropagation()">
+    <button type="button" (click)="edit.emit()">Editar</button>
+    <button class="danger" type="button" (click)="delete.emit()">Excluir</button>
+  </div>
+</article>

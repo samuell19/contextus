@@ -1,0 +1,75 @@
+<section class="editor-card">
+  <div class="header">
+    <div>
+      <p class="eyebrow">Agente</p>
+      <h2>{{ editing ? 'Editar configuração do agente' : 'Criar novo agente' }}</h2>
+    </div>
+    <div class="header-actions">
+      <app-status-badge [label]="editing ? 'Modo edição' : 'Novo agente'" tone="info"></app-status-badge>
+      <button class="ghost-button" type="button" (click)="close.emit()">{{ closeLabel }}</button>
+    </div>
+  </div>
+
+  <div class="editor-grid">
+    <label>
+      <span>Nome do agente</span>
+      <input [ngModel]="agentName" (ngModelChange)="handleNameChange($event)" type="text" placeholder="Ex.: Assistente de produto" />
+    </label>
+
+    <label>
+      <span>Modelo padrão</span>
+      <input
+        [ngModel]="agentDefaultModel"
+        (ngModelChange)="handleModelChange($event)"
+        type="text"
+        placeholder="openai/gpt-4o-mini"
+      />
+    </label>
+
+    <label class="checkbox-row">
+      <span>RAG habilitado</span>
+      <input
+        type="checkbox"
+        [ngModel]="agentRagEnabled"
+        (ngModelChange)="handleRagEnabledChange($event)"
+      />
+    </label>
+
+    <label>
+      <span>Top K de recuperação</span>
+      <input
+        [ngModel]="agentRagTopK"
+        (ngModelChange)="handleRagTopKChange($event)"
+        type="number"
+        min="1"
+        max="20"
+      />
+    </label>
+  </div>
+
+  <label>
+    <span>Prompt do sistema</span>
+    <textarea
+      [ngModel]="agentSystemPrompt"
+      (ngModelChange)="handlePromptChange($event)"
+      rows="7"
+      placeholder="Defina a personalidade, o tom e as regras de atuação do agente"
+    ></textarea>
+  </label>
+
+  <label>
+    <span>Avatar</span>
+    <input type="file" accept="image/*" (change)="avatarSelected.emit($event)" />
+  </label>
+
+  <div class="footer">
+    <p class="hint">Dica: deixe um modelo vazio para usar o padrão global do workspace.</p>
+
+    <div class="actions">
+      <button class="ghost-button danger" *ngIf="editing" type="button" (click)="deleteAgent.emit()">Excluir</button>
+      <button class="primary-button" type="button" (click)="saveAgent.emit()">
+        {{ editing ? 'Salvar alterações' : 'Criar agente' }}
+      </button>
+    </div>
+  </div>
+</section>

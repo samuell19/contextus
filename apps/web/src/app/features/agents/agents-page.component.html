@@ -1,0 +1,85 @@
+<main class="agents-shell">
+  <app-workspace-nav
+    currentLabel="Agentes"
+    [email]="auth.user()?.email ?? null"
+    [keyConfigured]="auth.hasConfiguredKey()"
+    [keyLast4]="auth.keyStatus()?.last4 ?? null"
+  ></app-workspace-nav>
+
+  <app-agent-sidebar
+    [title]="'Catálogo de agentes'"
+    [subtitle]="'Biblioteca visual'"
+    [showAccountCard]="false"
+    [agents]="agents()"
+    [avatarUrls]="avatarUrls()"
+    [selectedAgentId]="selectedAgentId()"
+    (createAgent)="openCreateAgent()"
+    (selectAgent)="selectAgent($event)"
+  ></app-agent-sidebar>
+
+  <section class="content">
+    <header class="content-header">
+      <div>
+        <p class="eyebrow">Gerenciamento</p>
+        <h1>Central de agentes e configuração</h1>
+        <p class="subtitle">
+          Separei essa área para concentrar criação, edição e ajuste dos agentes sem poluir a home de chat.
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <app-status-badge
+          [label]="selectedAgent() ? 'Agente selecionado' : 'Criando novo agente'"
+          [tone]="selectedAgent() ? 'info' : 'neutral'"
+        ></app-status-badge>
+        <button class="primary-link" type="button" [disabled]="!selectedAgent()" (click)="openChatForSelectedAgent()">
+          Abrir no chat
+        </button>
+      </div>
+    </header>
+
+    <div class="summary-grid">
+      <article class="summary-card">
+        <span>Total de agentes</span>
+        <strong>{{ agents().length }}</strong>
+        <small>Biblioteca centralizada para facilitar manutenção e consistência.</small>
+      </article>
+      <article class="summary-card">
+        <span>Configuração atual</span>
+        <strong>{{ selectedAgent()?.name || 'Novo agente' }}</strong>
+        <small>Edite nome, prompt, modelo e avatar em um único fluxo.</small>
+      </article>
+      <article class="summary-card">
+        <span>Status de uso</span>
+        <strong>{{ auth.hasConfiguredKey() ? 'Pronto para conversar' : 'Conecte a API key' }}</strong>
+        <small>Feedback claro para reduzir erros e orientar a próxima ação.</small>
+      </article>
+    </div>
+
+    <p *ngIf="message()" class="message">{{ message() }}</p>
+    <p *ngIf="error()" class="error">{{ error() }}</p>
+
+    <div *ngIf="!agents().length" class="guide-card">
+      <p class="eyebrow">Primeiro passo</p>
+      <h2>Crie o primeiro agente para iniciar a plataforma</h2>
+      <p>
+        Essa tela concentra a configuração justamente para manter a home mais limpa e focada em conversa,
+        seguindo uma navegação com começo, meio e fim.
+      </p>
+    </div>
+
+    <app-agent-editor
+      [editing]="editingAgentId() !== null"
+      [agentName]="agentName"
+      [agentSystemPrompt]="agentSystemPrompt"
+      [agentDefaultModel]="agentDefaultModel"
+      (close)="openCreateAgent()"
+      (deleteAgent)="removeAgent()"
+      (saveAgent)="saveAgent()"
+      (agentNameChange)="agentName = $event"
+      (agentSystemPromptChange)="agentSystemPrompt = $event"
+      (agentDefaultModelChange)="agentDefaultModel = $event"
+      (avatarSelected)="onAvatarSelected($event)"
+    ></app-agent-editor>
+  </section>
+</main>

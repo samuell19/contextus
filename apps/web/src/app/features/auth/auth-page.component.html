@@ -1,0 +1,62 @@
+<main class="auth-shell">
+  <section class="hero-panel">
+    <p class="eyebrow">Multiagent Platform</p>
+    <h1>Orquestre agentes, contexto e automações em uma interface com cara de produto real.</h1>
+    <p class="hero-copy">
+      Entre na plataforma, conecte sua chave do OpenRouter e comece a criar agentes com memória
+      persistente, sessões independentes e respostas em streaming.
+    </p>
+
+    <div class="hero-grid">
+      <article class="hero-card">
+        <span>Chat em tempo real</span>
+        <strong>Streaming token a token com histórico persistente</strong>
+      </article>
+      <article class="hero-card">
+        <span>Multiagente</span>
+        <strong>Crie personas separadas com prompt, avatar e modelo</strong>
+      </article>
+      <article class="hero-card">
+        <span>Memória viva</span>
+        <strong>Resumo por agente e por sessão pronto para evoluir para RAG e tools</strong>
+      </article>
+    </div>
+  </section>
+
+  <section class="auth-card">
+    <div class="card-head">
+      <div>
+        <p class="eyebrow">Acesso</p>
+        <h2>{{ mode() === 'login' ? 'Entrar na conta' : 'Criar nova conta' }}</h2>
+      </div>
+      <span class="chip">Angular + Node + Postgres</span>
+    </div>
+
+    <div class="tabs">
+      <button type="button" [class.active]="mode() === 'login'" (click)="mode.set('login')">Entrar</button>
+      <button type="button" [class.active]="mode() === 'register'" (click)="mode.set('register')">Criar conta</button>
+    </div>
+
+    <label>
+      <span>Email</span>
+      <input [(ngModel)]="email" type="email" placeholder="voce@exemplo.com" />
+    </label>
+
+    <label>
+      <span>Senha</span>
+      <input [(ngModel)]="password" type="password" placeholder="Minimo de 8 caracteres" />
+    </label>
+
+    <p class="helper">
+      {{ mode() === 'login'
+        ? 'Use a mesma conta para acessar seus agentes em diferentes sessões.'
+        : 'Depois do cadastro, voce já pode conectar sua API key e conversar.' }}
+    </p>
+
+    <p *ngIf="error()" class="error">{{ error() }}</p>
+
+    <button class="primary-button" type="button" [disabled]="busy()" (click)="submit()">
+      {{ busy() ? 'Processando...' : mode() === 'login' ? 'Entrar agora' : 'Criar conta' }}
+    </button>
+  </section>
+</main>

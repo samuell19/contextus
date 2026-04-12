@@ -1,0 +1,83 @@
+<main class="metrics-shell">
+  <app-workspace-nav
+    currentLabel="Metricas"
+    [email]="auth.user()?.email ?? null"
+    [keyConfigured]="auth.hasConfiguredKey()"
+    [keyLast4]="auth.keyStatus()?.last4 ?? null"
+  ></app-workspace-nav>
+
+  <section class="metrics-card">
+    <header class="header">
+      <div>
+        <p class="eyebrow">Observabilidade</p>
+        <h1>Metricas do RAG e Chat</h1>
+        <p class="subtitle">Acompanhe os indicadores core de desempenho, uso real do RAG e estabilidade do chat.</p>
+      </div>
+      <div class="header-actions">
+        <app-status-badge [label]="loading() ? 'Atualizando' : 'Online'" [tone]="loading() ? 'info' : 'success'"></app-status-badge>
+        <button class="ghost-button" type="button" (click)="refresh()">Atualizar agora</button>
+        <a class="ghost-button" routerLink="/home">Voltar ao chat</a>
+      </div>
+    </header>
+
+    <p *ngIf="updatedAt()" class="updated-at">Ultima atualizacao: {{ updatedAt() | date: 'dd/MM/yyyy HH:mm:ss' }}</p>
+    <p *ngIf="error()" class="error">{{ error() }}</p>
+
+    <ng-container *ngIf="metrics() as m">
+      <section class="grid">
+        <article class="metric-tile">
+          <span>Uploads recebidos</span>
+          <strong>{{ m.totalUploads }}</strong>
+          <small>Falhas: {{ m.uploadFailures }}</small>
+        </article>
+
+        <article class="metric-tile">
+          <span>Fontes indexadas</span>
+          <strong>{{ m.indexedSources }}</strong>
+          <small>Chunks totais: {{ m.indexedChunks }}</small>
+        </article>
+
+        <article class="metric-tile">
+          <span>Chunks por fonte</span>
+          <strong>{{ m.avgChunksPerSource }}</strong>
+          <small>Media de indexacao</small>
+        </article>
+
+        <article class="metric-tile">
+          <span>Retrieval hit-rate</span>
+          <strong>{{ retrievalHitRatePercent() }}</strong>
+          <small>Calls: {{ m.retrievalCalls }}</small>
+        </article>
+
+        <article class="metric-tile">
+          <span>Uso do RAG no chat</span>
+          <strong>{{ ragUsagePercent() }}</strong>
+          <small>Turns com contexto: {{ m.chatTurnsWithRagContext }}/{{ m.chatTurns }}</small>
+        </article>
+      </section>
+
+      <section class="latency-grid">
+        <article class="latency-card">
+          <h2>Latência de indexação (ms)</h2>
+          <p>Avg: {{ m.ingestionLatencyMs.avg }}</p>
+          <p>P50: {{ m.ingestionLatencyMs.p50 }}</p>
+          <p>P95: {{ m.ingestionLatencyMs.p95 }}</p>
+        </article>
+
+        <article class="latency-card">
+          <h2>Latência de retrieval (ms)</h2>
+          <p>Avg: {{ m.retrievalLatencyMs.avg }}</p>
+          <p>P50: {{ m.retrievalLatencyMs.p50 }}</p>
+          <p>P95: {{ m.retrievalLatencyMs.p95 }}</p>
+        </article>
+
+        <article class="latency-card">
+          <h2>Latência do turn de chat (ms)</h2>
+          <p>Avg: {{ m.chatTurnLatencyMs.avg }}</p>
+          <p>P50: {{ m.chatTurnLatencyMs.p50 }}</p>
+          <p>P95: {{ m.chatTurnLatencyMs.p95 }}</p>
+        </article>
+      </section>
+    </ng-container>
+  </section>
+</main>

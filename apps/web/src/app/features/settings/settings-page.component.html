@@ -1,0 +1,77 @@
+<main class="settings-shell">
+  <app-workspace-nav
+    currentLabel="Configurações"
+    [email]="auth.user()?.email ?? null"
+    [keyConfigured]="auth.hasConfiguredKey()"
+    [keyLast4]="auth.keyStatus()?.last4 ?? null"
+  ></app-workspace-nav>
+
+  <section class="settings-card">
+    <div class="header">
+      <div>
+        <p class="eyebrow">Configurações</p>
+        <h1>Conta, credenciais e acesso ao modelo</h1>
+      </div>
+      <div class="header-actions">
+        <app-status-badge
+          [label]="auth.keyStatus()?.configured ? 'API key conectada' : 'Sem API key'"
+          [tone]="auth.keyStatus()?.configured ? 'success' : 'warning'"
+        ></app-status-badge>
+        <a class="back-link" routerLink="/home">Voltar ao chat</a>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <article class="info-card">
+        <span>Conta</span>
+        <strong>{{ auth.user()?.email }}</strong>
+        <small>Usuário autenticado na plataforma</small>
+      </article>
+
+      <article class="info-card">
+        <span>Provider</span>
+        <strong>OpenRouter</strong>
+        <small>{{ auth.keyStatus()?.configured ? 'Pronto para responder' : 'Aguardando conexão' }}</small>
+      </article>
+
+      <article class="info-card">
+        <span>Últimos 4 dígitos</span>
+        <strong>{{ auth.keyStatus()?.last4 ?? '----' }}</strong>
+        <small>Indicador visual da chave ativa</small>
+      </article>
+    </div>
+
+    <section class="credentials-card">
+      <div class="credentials-head">
+        <div>
+          <p class="eyebrow">API keys</p>
+          <h2>Gerenciar conexão do usuário</h2>
+        </div>
+        <div class="active-key">
+          <span class="label">Status atual</span>
+          <strong>
+            {{
+              auth.keyStatus()?.configured
+                ? 'Usuário possui uma chave cadastrada'
+                : 'Nenhuma chave configurada'
+            }}
+          </strong>
+        </div>
+      </div>
+
+      <label>
+        <span>Atualizar API key</span>
+        <textarea [(ngModel)]="apiKey" rows="6" placeholder="Cole aqui uma nova chave do OpenRouter"></textarea>
+      </label>
+
+      <p *ngIf="message()" class="message">{{ message() }}</p>
+      <p *ngIf="error()" class="error">{{ error() }}</p>
+
+      <div class="actions">
+        <button class="ghost-button" type="button" (click)="removeKey()">Remover chave</button>
+        <button class="primary-button" type="button" (click)="saveKey()">Salvar chave</button>
+        <button class="danger-button" type="button" (click)="logout()">Sair da conta</button>
+      </div>
+    </section>
+  </section>
+</main>
