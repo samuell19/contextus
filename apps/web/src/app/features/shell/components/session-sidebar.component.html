@@ -1,102 +1,102 @@
-<aside class="sidebar">
-  <div class="sidebar-top">
-    <div class="brand-row">
+<aside class="flex flex-col h-full w-full max-h-screen">
+  <!-- Brand & Navigation -->
+  <div class="px-6 pt-6 pb-4 shrink-0 border-b border-white/5">
+    <div class="flex items-center justify-between mb-6">
       <div>
-        <p class="eyebrow">Plataforma IA</p>
-        <h2>Workspace</h2>
+        <p class="text-[0.68rem] font-bold tracking-widest text-brand-400/80 uppercase mb-0.5">Contextus...</p>
+        <h2 class="text-xl font-bold tracking-tight text-white m-0">Workspace</h2>
       </div>
-      <a routerLink="/agents" class="catalog-link">Agentes</a>
+      <a routerLink="/agents" class="text-sm font-medium text-ui-300 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg transition-colors">Agentes</a>
     </div>
 
-    <nav class="mini-nav" aria-label="Atalhos">
-      <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Home</a>
-      <a routerLink="/agents" routerLinkActive="active">Agentes</a>
+    <nav class="flex space-x-1" aria-label="Atalhos">
+      <a routerLink="/home" routerLinkActive="bg-white/10 text-white font-medium shadow-sm" [routerLinkActiveOptions]="{ exact: false }" class="px-3 py-1.5 text-sm text-ui-400 hover:text-ui-200 rounded-md transition-all">Home</a>
+      <a routerLink="/agents" routerLinkActive="bg-white/10 text-white font-medium shadow-sm" class="px-3 py-1.5 text-sm text-ui-400 hover:text-ui-200 rounded-md transition-all">Agentes</a>
     </nav>
   </div>
 
-  <div class="section-head">
+  <!-- Sessions Header -->
+  <div class="px-6 py-5 flex items-center justify-between shrink-0">
     <div>
-      <p class="eyebrow">Sessoes</p>
-      <h2>{{ selectedAgentName || 'Nenhum agente aberto' }}</h2>
+      <p class="text-[0.68rem] font-bold tracking-widest text-ui-400 uppercase mb-0.5">Sessoes</p>
+      <h2 class="text-white font-semibold text-lg max-w-[150px] truncate" [title]="selectedAgentName || ''">{{ selectedAgentName || 'Sem agente' }}</h2>
     </div>
-    <button class="ghost-button" type="button" [disabled]="!selectedAgentId" (click)="createSession.emit()">
-      Nova
+    <button class="btn-ghost !px-2 !py-1.5 !rounded-lg text-sm flex items-center space-x-1" type="button" [disabled]="!selectedAgentId" (click)="createSession.emit()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+      <span>Nova</span>
     </button>
   </div>
 
-  <div class="agent-summary" *ngIf="selectedAgentId; else emptySelection">
-    <div class="agent-copy">
-      <span class="agent-label">Agente ativo</span>
-      <strong>{{ selectedAgentName }}</strong>
-    </div>
-    <a routerLink="/agents" class="manage-link">Trocar</a>
-  </div>
-
-  <div *ngIf="selectedAgentId" class="list">
-    <article
-      *ngFor="let session of sessions; trackBy: trackById"
-      class="session-card"
-      [class.active]="session.id === selectedSessionId"
-      (click)="selectSession.emit(session)"
-    >
-      <div class="session-copy">
-        <strong>{{ session.title }}</strong>
-        <small>{{ formatDate(session.lastMessageAt || session.createdAt) }}</small>
+  <div class="px-6 pb-4 shrink-0" *ngIf="selectedAgentId; else emptySelection">
+    <div class="p-3 bg-brand-900/20 border border-brand-500/20 rounded-xl flex items-center justify-between group">
+      <div class="min-w-0">
+        <span class="block text-[0.65rem] text-brand-400 uppercase tracking-wider mb-0.5">Agente Ativo</span>
+        <strong class="block text-sm text-white truncate">{{ selectedAgentName }}</strong>
       </div>
-
-      <div class="actions">
-        <button class="icon-button" type="button" (click)="renameSession.emit(session); $event.stopPropagation()">
-          Edit
-        </button>
-        <button class="icon-button danger" type="button" (click)="deleteSession.emit(session); $event.stopPropagation()">
-          Del
-        </button>
-      </div>
-    </article>
-
-    <div *ngIf="!sessions.length" class="empty-card">
-      <strong>Sem sessoes ainda</strong>
-      <p>Abra uma nova conversa para comecar a construir o historico desse agente.</p>
+      <a routerLink="/agents" class="text-xs text-brand-400 opacity-70 group-hover:opacity-100 hover:text-brand-300 transition-opacity">Trocar</a>
     </div>
   </div>
 
   <ng-template #emptySelection>
-    <div class="empty-card">
-      <strong>{{ hasAgents ? 'Escolha um agente no catalogo' : 'Nenhum agente criado ainda' }}</strong>
-      <p>
-        {{
-          hasAgents
-            ? 'Abra o catalogo de agentes e escolha um deles para entrar no fluxo de conversa.'
-            : 'Crie um agente primeiro para liberar sessoes e chat.'
-        }}
-      </p>
-      <a routerLink="/agents" class="manage-link">Abrir catalogo</a>
+    <div class="px-6 pb-4 shrink-0">
+      <div class="p-4 bg-ui-800/30 border border-white/5 rounded-xl text-center">
+        <strong class="block text-sm mb-1 text-ui-200">{{ hasAgents ? 'Escolha um agente' : 'Nenhum agente' }}</strong>
+        <p class="text-xs text-ui-400 mb-3">{{ hasAgents ? 'Escolha no catalogo para comecar.' : 'Crie seu primeiro agente.' }}</p>
+        <a routerLink="/agents" class="text-xs font-medium text-brand-400 hover:text-brand-300">Abrir catalogo &rarr;</a>
+      </div>
     </div>
   </ng-template>
 
-  <div class="account-shell">
-    <button class="account-trigger" type="button" (click)="toggleAccountMenu($event)">
-      <span class="account-avatar">{{ userInitial }}</span>
+  <!-- Sessions List -->
+  <div class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 custom-scrollbar">
+    <div *ngIf="selectedAgentId && !sessions.length" class="text-center p-6 text-ui-400 text-sm italic">
+      <p>Sem sessoes ainda. Clique em Nova para iniciar uma conversa.</p>
+    </div>
 
-      <span class="account-copy">
-        <span class="account-label">Conta</span>
-        <strong>{{ email || 'Sem sessao' }}</strong>
-        <small>
-                    {{
-            keyConfigured
-              ? 'OpenRouter conectado' + (keyLast4 ? ' / ' + keyLast4 : '')
-              : 'API key pendente'
-          }}
-        </small>
-      </span>
+    <article *ngFor="let session of sessions; trackBy: trackById"
+             class="group relative flex items-center justify-between p-3 rounded-xl cursor-pointer border border-transparent transition-all"
+             [ngClass]="session.id === selectedSessionId ? 'bg-white/10 border-white/5 shadow-md' : 'hover:bg-white/5 hover:border-white/5'"
+             (click)="selectSession.emit(session)">
+      <div class="min-w-0 pr-4">
+        <strong class="block text-sm font-medium text-ui-100 truncate" [ngClass]="session.id === selectedSessionId ? 'text-brand-300' : ''">{{ session.title }}</strong>
+        <small class="text-xs text-ui-500">{{ formatDate(session.lastMessageAt || session.createdAt) }}</small>
+      </div>
 
-      <span class="chevron">{{ accountMenuOpen ? '^' : 'v' }}</span>
+      <div class="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1 shrink-0">
+        <button class="p-1.5 text-ui-400 hover:text-white hover:bg-white/10 rounded-md transition-colors" type="button" title="Renomear" (click)="renameSession.emit(session); $event.stopPropagation()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+        </button>
+        <button class="p-1.5 text-red-400/70 hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors" type="button" title="Excluir" (click)="deleteSession.emit(session); $event.stopPropagation()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <!-- Account Menu -->
+  <div class="shrink-0 p-4 border-t border-white/5 relative">
+    <button class="w-full flex items-center justify-between p-2 rounded-xl hover:bg-white/5 transition-colors text-left" type="button" (click)="toggleAccountMenu($event)">
+      <div class="flex items-center space-x-3 overflow-hidden">
+        <span class="w-9 h-9 rounded-full bg-gradient-to-br from-brand-600 to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-inner shrink-0">{{ userInitial }}</span>
+        <div class="min-w-0">
+          <strong class="block text-sm text-ui-100 truncate">{{ email || 'Sem sessao' }}</strong>
+          <small class="block text-xs truncate" [ngClass]="keyConfigured ? 'text-green-400' : 'text-yellow-500'">
+            {{ keyConfigured ? (keyLast4 ? 'OpenRouter \u2022\u2022\u2022\u2022 ' + keyLast4 : 'OpenRouter conectado') : 'API key pendente' }}
+          </small>
+        </div>
+      </div>
+      <svg class="text-ui-400 shrink-0 ml-2 transition-transform duration-200" [class.rotate-180]="accountMenuOpen" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
     </button>
 
-    <div class="account-menu" *ngIf="accountMenuOpen" (click)="$event.stopPropagation()">
-      <button type="button" (click)="handleProfileClick($event)">Editar perfil</button>
-      <button type="button" (click)="handleApiKeysClick($event)">API key</button>
-      <button class="danger" type="button" (click)="handleLogoutClick($event)">Sair</button>
+    <!-- Dropdown -->
+    <div class="absolute bottom-full left-4 right-4 mb-2 bg-ui-800 border border-white/10 rounded-xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] overflow-hidden z-50 origin-bottom animate-slide-up" *ngIf="accountMenuOpen" (click)="$event.stopPropagation()">
+      <div class="p-1 flex flex-col">
+        <button class="text-left px-4 py-2.5 text-sm text-ui-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors" type="button" (click)="handleProfileClick($event)">Editar perfil</button>
+        <button class="text-left px-4 py-2.5 text-sm text-ui-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors" type="button" (click)="handleApiKeysClick($event)">Configurar API</button>
+        <div class="h-px bg-white/5 my-1"></div>
+        <button class="text-left px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors" type="button" (click)="handleLogoutClick($event)">Sair</button>
+      </div>
     </div>
   </div>
 </aside>
+

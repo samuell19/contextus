@@ -23,6 +23,7 @@ export class ChatService {
     userId: string;
     sessionId: string;
     content: string;
+    onEvent: (event: { event: string; data?: any }) => void;
     onDelta: (delta: string, accumulated: string) => void;
   }) {
     const turnStartedAt = Date.now();
@@ -83,13 +84,19 @@ export class ChatService {
     ]);
     const historyMessages = [...historyMessagesDesc].reverse();
 
+    const transientLogs: Array<{ event: string; data?: any }> = [];
+
     const toolResults = await this.toolOrchestrator.execute({
       userId: input.userId,
       agentId: agent.id,
       ragEnabled: agent.ragEnabled,
       ragTopK: agent.ragTopK,
       apiKey,
-      prompt: input.content
+      prompt: input.content,
+      onEvent: (event) => {
+        transientLogs.push(event);
+        input.onEvent(event);
+      }
     });
 
     console.info('[CHAT] Tools executed', {
@@ -139,7 +146,8 @@ export class ChatService {
     const assistantMessage = await Message.create({
       sessionId: session.id,
       role: 'assistant',
-      content: answer
+      content: answer,
+      metadata: transientLogs.length > 0 ? { ragLogs: transientLogs } : null
     });
 
     session.lastMessageAt = new Date();

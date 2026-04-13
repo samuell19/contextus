@@ -205,6 +205,9 @@ export class Message extends Model {
   @Column({ type: DataType.TEXT, allowNull: false })
   declare content: string;
 
+  @Column({ type: DataType.JSONB, allowNull: true })
+  declare metadata: any | null;
+
   @CreatedAt
   declare createdAt: Date;
 
@@ -339,6 +342,7 @@ export function toMessageDto(message: Message): MessageDto {
     sessionId: message.sessionId,
     role: message.role,
     content: message.content,
+    metadata: message.metadata ?? null,
     createdAt: message.createdAt.toISOString()
   };
 }

@@ -1,77 +1,94 @@
-<main class="settings-shell">
+<main class="min-h-screen flex w-full bg-ui-950/30">
   <app-workspace-nav
+    class="shrink-0 z-10 w-[240px] md:w-[280px] border-r border-white/5 bg-ui-900/60 flex flex-col"
     currentLabel="Configurações"
     [email]="auth.user()?.email ?? null"
     [keyConfigured]="auth.hasConfiguredKey()"
     [keyLast4]="auth.keyStatus()?.last4 ?? null"
   ></app-workspace-nav>
 
-  <section class="settings-card">
-    <div class="header">
-      <div>
-        <p class="eyebrow">Configurações</p>
-        <h1>Conta, credenciais e acesso ao modelo</h1>
-      </div>
-      <div class="header-actions">
-        <app-status-badge
-          [label]="auth.keyStatus()?.configured ? 'API key conectada' : 'Sem API key'"
-          [tone]="auth.keyStatus()?.configured ? 'success' : 'warning'"
-        ></app-status-badge>
-        <a class="back-link" routerLink="/home">Voltar ao chat</a>
-      </div>
-    </div>
+  <div class="flex-1 flex flex-col p-4 md:p-8 h-screen overflow-y-auto custom-scrollbar relative">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.1),transparent_50%)] pointer-events-none"></div>
 
-    <div class="info-grid">
-      <article class="info-card">
-        <span>Conta</span>
-        <strong>{{ auth.user()?.email }}</strong>
-        <small>Usuário autenticado na plataforma</small>
-      </article>
-
-      <article class="info-card">
-        <span>Provider</span>
-        <strong>OpenRouter</strong>
-        <small>{{ auth.keyStatus()?.configured ? 'Pronto para responder' : 'Aguardando conexão' }}</small>
-      </article>
-
-      <article class="info-card">
-        <span>Últimos 4 dígitos</span>
-        <strong>{{ auth.keyStatus()?.last4 ?? '----' }}</strong>
-        <small>Indicador visual da chave ativa</small>
-      </article>
-    </div>
-
-    <section class="credentials-card">
-      <div class="credentials-head">
+    <section class="glass-panel max-w-5xl mx-auto w-full rounded-[32px] p-6 md:p-10 flex flex-col gap-8 relative z-10">
+      <div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
         <div>
-          <p class="eyebrow">API keys</p>
-          <h2>Gerenciar conexão do usuário</h2>
+          <p class="text-[0.76rem] font-bold tracking-[0.18em] text-brand-400 uppercase mb-2">Configurações</p>
+          <h1 class="text-3xl md:text-4xl tracking-tight font-bold text-white max-w-xl">Conta, credenciais e acesso ao modelo</h1>
         </div>
-        <div class="active-key">
-          <span class="label">Status atual</span>
-          <strong>
-            {{
-              auth.keyStatus()?.configured
-                ? 'Usuário possui uma chave cadastrada'
-                : 'Nenhuma chave configurada'
-            }}
-          </strong>
+        <div class="flex flex-col md:items-end gap-3 shrink-0">
+          <app-status-badge
+            [label]="auth.keyStatus()?.configured ? 'API key conectada' : 'Sem API key'"
+            [tone]="auth.keyStatus()?.configured ? 'success' : 'warning'"
+          ></app-status-badge>
+          <a class="text-[0.88rem] font-semibold text-blue-300 hover:text-blue-200 transition-colors flex items-center gap-1.5" routerLink="/home">
+            &larr; Voltar ao chat
+          </a>
         </div>
       </div>
 
-      <label>
-        <span>Atualizar API key</span>
-        <textarea [(ngModel)]="apiKey" rows="6" placeholder="Cole aqui uma nova chave do OpenRouter"></textarea>
-      </label>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <article class="p-5 border border-white/10 rounded-2xl bg-ui-800/40 backdrop-blur-sm shadow-sm flex flex-col gap-1.5">
+          <span class="text-sm text-ui-400">Conta</span>
+          <strong class="text-[1.08rem] text-white">{{ auth.user()?.email }}</strong>
+          <small class="text-xs text-ui-500 mt-1">Usuário autenticado na plataforma</small>
+        </article>
 
-      <p *ngIf="message()" class="message">{{ message() }}</p>
-      <p *ngIf="error()" class="error">{{ error() }}</p>
+        <article class="p-5 border border-white/10 rounded-2xl bg-ui-800/40 backdrop-blur-sm shadow-sm flex flex-col gap-1.5">
+          <span class="text-sm text-ui-400">Provider</span>
+          <strong class="text-[1.08rem] text-white">OpenRouter</strong>
+          <small class="text-xs text-ui-500 mt-1">{{ auth.keyStatus()?.configured ? 'Pronto para responder' : 'Aguardando conexão' }}</small>
+        </article>
 
-      <div class="actions">
-        <button class="ghost-button" type="button" (click)="removeKey()">Remover chave</button>
-        <button class="primary-button" type="button" (click)="saveKey()">Salvar chave</button>
-        <button class="danger-button" type="button" (click)="logout()">Sair da conta</button>
+        <article class="p-5 border border-white/10 rounded-2xl bg-ui-800/40 backdrop-blur-sm shadow-sm flex flex-col gap-1.5">
+          <span class="text-sm text-ui-400">Últimos 4 dígitos</span>
+          <strong class="text-[1.08rem] text-white">{{ auth.keyStatus()?.last4 ?? '----' }}</strong>
+          <small class="text-xs text-ui-500 mt-1">Indicador visual da chave ativa</small>
+        </article>
       </div>
+
+      <section class="border border-white/10 rounded-[24px] bg-ui-800/30 p-6 md:p-8 flex flex-col gap-6 shadow-inner">
+        <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+          <div>
+            <p class="text-[0.76rem] font-bold tracking-[0.18em] text-ui-400 uppercase mb-1">API keys</p>
+            <h2 class="text-xl font-bold text-white">Gerenciar conexão do usuário</h2>
+          </div>
+          <div class="px-4 py-3 rounded-2xl border border-blue-400/20 bg-ui-800/80 shadow-sm flex flex-col gap-1">
+            <span class="text-[0.8rem] text-ui-400">Status atual</span>
+            <strong class="text-[0.96rem] text-ui-200">
+              {{
+                auth.keyStatus()?.configured
+                  ? 'Usuário possui uma chave cadastrada'
+                  : 'Nenhuma chave configurada'
+              }}
+            </strong>
+          </div>
+        </div>
+
+        <label class="flex flex-col gap-2.5">
+          <span class="text-sm font-medium text-ui-300">Atualizar API key</span>
+          <textarea [(ngModel)]="apiKey" rows="4" class="input-base text-sm max-h-[300px]" placeholder="Cole aqui uma nova chave do OpenRouter"></textarea>
+        </label>
+
+        <div *ngIf="message()" class="px-4 py-3 rounded-2xl bg-green-900/20 border border-green-500/20 text-green-300 text-sm flex items-center gap-2 animate-fade-in">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+          {{ message() }}
+        </div>
+        
+        <div *ngIf="error()" class="px-4 py-3 rounded-2xl bg-red-900/20 border border-red-500/20 text-red-300 text-sm flex items-center gap-2 animate-fade-in">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+          {{ error() }}
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+          <button class="btn-ghost" type="button" (click)="removeKey()">Remover chave</button>
+          <button class="btn-primary flex-1 sm:flex-none px-8" type="button" (click)="saveKey()">Salvar chave</button>
+          
+          <div class="sm:ml-auto">
+            <button class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-medium text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/10 transition-colors" type="button" (click)="logout()">Sair da conta</button>
+          </div>
+        </div>
+      </section>
     </section>
-  </section>
+  </div>
 </main>

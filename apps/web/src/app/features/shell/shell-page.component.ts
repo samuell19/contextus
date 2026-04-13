@@ -9,6 +9,10 @@ import { ChatStreamService } from '../../core/chat-stream.service';
 import { ChatPanelComponent } from './components/chat-panel.component';
 import { SessionSidebarComponent } from './components/session-sidebar.component';
 
+export interface UIMessage extends MessageDto {
+  transientLogs?: { event: string; data?: any }[];
+}
+
 @Component({
   selector: 'app-shell-page',
   standalone: true,
@@ -19,7 +23,7 @@ import { SessionSidebarComponent } from './components/session-sidebar.component'
 export class ShellPageComponent implements OnInit {
   public readonly agents = signal<AgentDto[]>([]);
   public readonly sessions = signal<SessionDto[]>([]);
-  public readonly messages = signal<MessageDto[]>([]);
+  public readonly messages = signal<UIMessage[]>([]);
   public readonly selectedAgentId = signal<string | null>(null);
   public readonly selectedSessionId = signal<string | null>(null);
   public readonly streaming = signal(false);
@@ -93,9 +97,9 @@ export class ShellPageComponent implements OnInit {
       }
 
       if (sessionId) {
-        void this.loadMessages(sessionId);
+        if (!this.streaming()) void this.loadMessages(sessionId);
       } else {
-        this.messages.set([]);
+        if (!this.streaming()) this.messages.set([]);
       }
     });
   }
@@ -196,6 +200,10 @@ export class ShellPageComponent implements OnInit {
       const tempUserId = `temp-user-${Date.now()}`;
       const tempAssistantId = `temp-assistant-${Date.now()}`;
 
+      // Increment load version to invalidate any pending loadMessages 
+      // from the initial session creation before it wipes our optimistic update
+      this.messagesLoadVersion++;
+
       this.messages.update((current) => [
         ...current,
         { id: tempUserId, sessionId, role: 'user', content, createdAt: optimisticTimestamp },
@@ -206,6 +214,17 @@ export class ShellPageComponent implements OnInit {
         accessToken: token,
         sessionId,
         content,
+        onEvent: (payload) => {
+          this.messages.update((current) =>
+            current.map((msg) => {
+              if (msg.id === tempAssistantId) {
+                const logs = msg.transientLogs || [];
+                return { ...msg, transientLogs: [...logs, payload] };
+              }
+              return msg;
+            })
+          );
+        },
         onChunk: (payload) => {
           this.messages.update((current) =>
             current.map((message) =>

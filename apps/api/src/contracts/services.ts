@@ -48,6 +48,7 @@ export type ToolExecutionInput = {
   ragTopK: number;
   apiKey: string;
   prompt: string;
+  onEvent?: (event: { event: string; data?: any }) => void;
 };
 
 export type ToolExecutionOutput = {

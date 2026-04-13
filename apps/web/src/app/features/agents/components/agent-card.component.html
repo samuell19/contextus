@@ -1,30 +1,39 @@
-<article class="card" (click)="openChat.emit()">
-  <button
-    class="menu-button"
-    type="button"
-    aria-label="Abrir acoes do agente"
-    (click)="toggleMenu.emit(); $event.stopPropagation()"
-  >
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+<article class="relative flex flex-col h-full bg-ui-800/40 border border-white/5 rounded-3xl p-6 cursor-pointer hover:bg-ui-800/60 hover:border-white/10 group overflow-hidden" (click)="openChat.emit()">
+  <div class="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
+  
+  <div class="flex items-start justify-between gap-4 mb-4 relative z-10">
+    <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-inner overflow-hidden border border-white/10" [ngClass]="avatarUrl ? 'bg-transparent' : 'bg-gradient-to-br from-ui-700 to-ui-800'">
+      <img *ngIf="avatarUrl; else avatarFallback" [src]="avatarUrl" class="w-full h-full object-cover" [alt]="'Avatar do agente ' + agent.name" />
+      <ng-template #avatarFallback>
+        <span class="text-xl font-bold text-white">{{ initial }}</span>
+      </ng-template>
+    </div>
 
-  <div class="avatar-shell" [class.has-image]="avatarUrl">
-    <img *ngIf="avatarUrl; else avatarFallback" [src]="avatarUrl" [alt]="'Avatar do agente ' + agent.name" />
-    <ng-template #avatarFallback>
-      <span>{{ initial }}</span>
-    </ng-template>
+    <button
+      class="p-2 text-ui-400 hover:text-white hover:bg-white/10 rounded-xl transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+      type="button"
+      aria-label="Abrir opções do agente"
+      (click)="toggleMenu.emit(); $event.stopPropagation()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+    </button>
   </div>
 
-  <div class="copy">
-    <h3>{{ agent.name }}</h3>
-    <p>{{ agent.systemPrompt || 'Agente pronto para receber contexto e conversar com o usuario.' }}</p>
-    <span class="model-chip">{{ agent.defaultModelSlug || 'Modelo global do workspace' }}</span>
+  <div class="flex-1 flex flex-col min-w-0 relative z-10">
+    <h3 class="text-lg font-bold text-white mb-1 truncate">{{ agent.name }}</h3>
+    <p class="text-sm text-ui-400 line-clamp-3 leading-relaxed mb-4 flex-1">
+      {{ agent.systemPrompt || 'Agente pronto para receber contexto e conversar com o usuário.' }}
+    </p>
+    <div class="mt-auto">
+      <span class="inline-block px-3 py-1.5 rounded-lg bg-ui-900 border border-white/5 text-[0.7rem] uppercase tracking-wider font-semibold text-ui-300 truncate max-w-full">
+        {{ agent.defaultModelSlug || 'Modelo global' }}
+      </span>
+    </div>
   </div>
 
-  <div class="menu" *ngIf="menuOpen" (click)="$event.stopPropagation()">
-    <button type="button" (click)="edit.emit()">Editar</button>
-    <button class="danger" type="button" (click)="delete.emit()">Excluir</button>
+  <div class="absolute right-4 top-14 mt-1 bg-ui-800 border border-white/10 rounded-xl shadow-2xl p-1 w-40 z-50 flex flex-col origin-top-right animate-fade-in" *ngIf="menuOpen" (click)="$event.stopPropagation()">
+    <button class="w-full text-left px-3 py-2 text-sm text-ui-200 hover:text-white hover:bg-white/5 rounded-lg transition-colors" type="button" (click)="edit.emit()">Editar agente</button>
+    <div class="h-px w-full bg-white/5 my-1"></div>
+    <button class="w-full text-left px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors" type="button" (click)="delete.emit()">Excluir</button>
   </div>
 </article>

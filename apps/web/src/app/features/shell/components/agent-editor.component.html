@@ -1,24 +1,25 @@
-<section class="editor-card">
-  <div class="header">
+<section class="border border-white/10 rounded-[32px] bg-ui-900/60 p-6 md:p-8 flex flex-col gap-6 shadow-inner relative z-10 w-full mb-6">
+  <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-white/5 pb-6">
     <div>
-      <p class="eyebrow">Agente</p>
-      <h2>{{ editing ? 'Editar configuração do agente' : 'Criar novo agente' }}</h2>
+      <p class="text-[0.76rem] font-bold tracking-[0.18em] text-brand-400 uppercase mb-1">Agente</p>
+      <h2 class="text-xl font-bold text-white">{{ editing ? 'Editar configuração do agente' : 'Criar novo agente' }}</h2>
     </div>
-    <div class="header-actions">
+    <div class="flex items-center gap-3">
       <app-status-badge [label]="editing ? 'Modo edição' : 'Novo agente'" tone="info"></app-status-badge>
-      <button class="ghost-button" type="button" (click)="close.emit()">{{ closeLabel }}</button>
+      <button class="btn-ghost !px-3 !py-1.5" type="button" (click)="close.emit()">{{ closeLabel }}</button>
     </div>
   </div>
 
-  <div class="editor-grid">
-    <label>
-      <span>Nome do agente</span>
-      <input [ngModel]="agentName" (ngModelChange)="handleNameChange($event)" type="text" placeholder="Ex.: Assistente de produto" />
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+    <label class="flex flex-col gap-2">
+      <span class="text-sm font-medium text-ui-300">Nome do agente</span>
+      <input class="input-base" [ngModel]="agentName" (ngModelChange)="handleNameChange($event)" type="text" placeholder="Ex.: Assistente de produto" />
     </label>
 
-    <label>
-      <span>Modelo padrão</span>
+    <label class="flex flex-col gap-2">
+      <span class="text-sm font-medium text-ui-300">Modelo padrão</span>
       <input
+        class="input-base"
         [ngModel]="agentDefaultModel"
         (ngModelChange)="handleModelChange($event)"
         type="text"
@@ -26,48 +27,57 @@
       />
     </label>
 
-    <label class="checkbox-row">
-      <span>RAG habilitado</span>
+    <label class="flex items-center gap-3 p-4 border border-white/5 bg-ui-800/30 rounded-2xl cursor-pointer hover:bg-ui-800/50 transition-colors">
       <input
+        class="w-5 h-5 rounded border-ui-600 bg-ui-800 text-brand-500 focus:ring-brand-500/50 focus:ring-offset-ui-900"
         type="checkbox"
         [ngModel]="agentRagEnabled"
         (ngModelChange)="handleRagEnabledChange($event)"
       />
+      <span class="text-sm font-medium text-ui-200">RAG habilitado</span>
     </label>
 
-    <label>
-      <span>Top K de recuperação</span>
+    <label class="flex flex-col gap-2" [class.opacity-50]="!agentRagEnabled">
+      <span class="text-sm font-medium text-ui-300">Top K de recuperação</span>
       <input
+        class="input-base"
         [ngModel]="agentRagTopK"
         (ngModelChange)="handleRagTopKChange($event)"
         type="number"
         min="1"
         max="20"
+        [disabled]="!agentRagEnabled"
       />
     </label>
   </div>
 
-  <label>
-    <span>Prompt do sistema</span>
+  <label class="flex flex-col gap-2 mt-2">
+    <span class="text-sm font-medium text-ui-300">Prompt do sistema</span>
     <textarea
+      class="input-base resize-y"
       [ngModel]="agentSystemPrompt"
       (ngModelChange)="handlePromptChange($event)"
-      rows="7"
+      rows="5"
       placeholder="Defina a personalidade, o tom e as regras de atuação do agente"
     ></textarea>
   </label>
 
-  <label>
-    <span>Avatar</span>
-    <input type="file" accept="image/*" (change)="avatarSelected.emit($event)" />
+  <label class="flex flex-col gap-2 mt-2">
+    <span class="text-sm font-medium text-ui-300">Avatar</span>
+    <input 
+      class="block w-full text-sm text-ui-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-ui-800 hover:file:bg-ui-700 file:text-white transition-colors cursor-pointer border border-white/5 rounded-2xl bg-ui-800/30 p-2"
+      type="file" 
+      accept="image/*" 
+      (change)="avatarSelected.emit($event)" 
+    />
   </label>
 
-  <div class="footer">
-    <p class="hint">Dica: deixe um modelo vazio para usar o padrão global do workspace.</p>
+  <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-6 border-t border-white/5">
+    <p class="text-xs text-ui-400 bg-ui-800/40 px-3 py-2 rounded-xl">Dica: deixe um modelo vazio para usar o padrão global.</p>
 
-    <div class="actions">
-      <button class="ghost-button danger" *ngIf="editing" type="button" (click)="deleteAgent.emit()">Excluir</button>
-      <button class="primary-button" type="button" (click)="saveAgent.emit()">
+    <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+      <button class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-medium text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/10 transition-colors" *ngIf="editing" type="button" (click)="deleteAgent.emit()">Excluir</button>
+      <button class="btn-primary w-full sm:w-auto shadow-xl shadow-brand-500/10 px-8" type="button" (click)="saveAgent.emit()">
         {{ editing ? 'Salvar alterações' : 'Criar agente' }}
       </button>
     </div>

@@ -14,51 +14,25 @@ import { AuthStore } from './core/auth.store';
     </ng-container>
 
     <ng-template #loading>
-      <main class="loading-shell">
-        <div class="loading-card">
-          <p class="eyebrow">Multiagent Platform</p>
-          <h1>Preparando o workspace</h1>
-          <p>Conferindo sua sessao e carregando o contexto inicial.</p>
+      <main class="min-h-screen flex items-center justify-center p-6">
+        <div class="glass-panel p-8 max-w-lg w-full animate-slide-up text-center space-y-4 relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-500 to-blue-500"></div>
+          <p class="text-xs font-bold tracking-widest text-brand-400 uppercase mb-2">Multiagent Platform</p>
+          <h1 class="text-3xl font-semibold text-ui-50 tracking-tight">Preparando o workspace</h1>
+          <p class="text-ui-400 text-sm">Conferindo sua sessão e carregando o contexto inicial...</p>
+          
+          <div class="flex justify-center pt-6 pb-2">
+            <div class="flex space-x-2">
+              <div class="w-3 h-3 rounded-full bg-brand-500/80 animate-bounce" style="animation-duration: 0.8s;"></div>
+              <div class="w-3 h-3 rounded-full bg-blue-500/80 animate-bounce" style="animation-delay: 0.15s; animation-duration: 0.8s;"></div>
+              <div class="w-3 h-3 rounded-full bg-cyan-500/80 animate-bounce" style="animation-delay: 0.3s; animation-duration: 0.8s;"></div>
+            </div>
+          </div>
         </div>
       </main>
     </ng-template>
   `,
-  styles: [
-    `
-      .loading-shell {
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 24px;
-      }
-
-      .loading-card {
-        width: min(520px, 100%);
-        border: 1px solid var(--stroke);
-        background: var(--surface);
-        box-shadow: var(--shadow);
-        border-radius: var(--radius);
-        padding: 32px;
-      }
-
-      .eyebrow {
-        margin: 0 0 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.14em;
-        font-size: 0.78rem;
-        color: var(--accent-strong);
-      }
-
-      h1 {
-        margin: 0 0 10px;
-      }
-
-      p {
-        margin: 0;
-        color: var(--muted);
-      }
-    `
-  ]
+  styles: []
 })
 export class AppComponent implements OnInit {
   protected readonly auth = inject(AuthStore);

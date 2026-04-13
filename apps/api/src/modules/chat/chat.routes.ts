@@ -21,6 +21,13 @@ export function createChatRouter(chatService: ChatService) {
           userId: auth.sub,
           sessionId: input.sessionId,
           content: input.content,
+          onEvent: (payload) => {
+            writeSse(response, {
+              type: 'event',
+              event: payload.event,
+              data: payload.data
+            });
+          },
           onDelta: (delta, accumulated) => {
             writeSse(response, {
               type: 'chunk',

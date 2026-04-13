@@ -13,6 +13,7 @@ export class ChatStreamService {
     sessionId: string;
     content: string;
     onChunk: (payload: Extract<StreamChunkPayloadDto, { type: 'chunk' }>) => void;
+    onEvent?: (payload: Extract<StreamChunkPayloadDto, { type: 'event' }>) => void;
     onDone: (payload: Extract<StreamChunkPayloadDto, { type: 'done' }>) => void;
     onError: (message: string) => void;
   }) {
@@ -65,6 +66,10 @@ export class ChatStreamService {
 
         if (payload.type === 'chunk') {
           input.onChunk(payload);
+        }
+
+        if (payload.type === 'event' && input.onEvent) {
+          input.onEvent(payload);
         }
 
         if (payload.type === 'done') {

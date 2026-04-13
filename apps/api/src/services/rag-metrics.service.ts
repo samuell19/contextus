@@ -126,15 +126,16 @@ export class RagMetricsService {
     void sequelize
       .query(
         `
-          INSERT INTO ${metricTable} (id, event_type, value_number, payload)
-          VALUES (:id, :eventType, :valueNumber, CAST(:payload AS jsonb))
+          INSERT INTO ${metricTable} (id, event_type, value_number, payload, created_at)
+          VALUES (:id, :eventType, :valueNumber, CAST(:payload AS jsonb), :createdAt)
         `,
         {
           replacements: {
             id: crypto.randomUUID(),
             eventType,
             valueNumber: valueNumber ?? null,
-            payload: JSON.stringify(payload ?? {})
+            payload: JSON.stringify(payload ?? {}),
+            createdAt: new Date().toISOString()
           }
         }
       )

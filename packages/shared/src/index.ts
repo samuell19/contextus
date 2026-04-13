@@ -82,6 +82,7 @@ export const messageSchema = z.object({
   sessionId: z.string().uuid(),
   role: messageRoleSchema,
   content: z.string(),
+  metadata: z.record(z.any()).nullable().optional(),
   createdAt: z.string().datetime()
 });
 
@@ -104,6 +105,11 @@ export const streamChunkPayloadSchema = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('error'),
     message: z.string()
+  }),
+  z.object({
+    type: z.literal('event'),
+    event: z.string(),
+    data: z.any().optional()
   })
 ]);
 

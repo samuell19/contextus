@@ -63,8 +63,8 @@ export const routes: Routes = [
   { path: 'agents', component: AgentCatalogPageComponent, canActivate: [readyGuard] },
   { path: 'agents/new', component: AgentFormPageComponent, canActivate: [readyGuard] },
   { path: 'agents/:agentId/edit', component: AgentFormPageComponent, canActivate: [readyGuard] },
-  { path: 'home', component: ShellPageComponent, canActivate: [readyGuard] },
-  { path: 'home/:agentId', component: ShellPageComponent, canActivate: [readyGuard] },
-  { path: 'home/:agentId/:sessionId', component: ShellPageComponent, canActivate: [readyGuard] },
+  { path: 'home', component: ShellPageComponent, canActivate: [readyGuard], data: { reuseComponent: 'shell' } },
+  { path: 'home/:agentId', component: ShellPageComponent, canActivate: [readyGuard], data: { reuseComponent: 'shell' } },
+  { path: 'home/:agentId/:sessionId', component: ShellPageComponent, canActivate: [readyGuard], data: { reuseComponent: 'shell' } },
   { path: '**', redirectTo: 'home' }
 ];

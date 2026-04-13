@@ -24,6 +24,8 @@ export class RagTool implements ChatTool {
       topK: input.ragTopK
     });
 
+    input.onEvent?.({ event: 'log', data: 'Consultando base vetorial...' });
+
     const rows = await this.ragService.retrieveContext({
       userId: input.userId,
       agentId: input.agentId,
@@ -44,6 +46,11 @@ export class RagTool implements ChatTool {
       userId: input.userId,
       agentId: input.agentId,
       count: rows.length
+    });
+
+    input.onEvent?.({
+      event: 'rag_chunks',
+      data: rows.map(r => ({ content: r.content, score: r.score }))
     });
 
     const chunks = rows
