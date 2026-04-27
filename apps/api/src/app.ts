@@ -11,6 +11,8 @@ import { AuthService } from './modules/auth/auth.service.js';
 import { createChatRouter } from './modules/chat/chat.routes.js';
 import { ChatService } from './modules/chat/chat.service.js';
 import { createCredentialsRouter } from './modules/credentials/credentials.routes.js';
+import { createEvalsRouter } from './modules/evals/evals.routes.js';
+import { EvalLabService } from './modules/evals/evals.service.js';
 import { createHealthRouter } from './modules/health/health.routes.js';
 import { createMetricsRouter } from './modules/metrics/metrics.routes.js';
 import { createSessionsRouter } from './modules/sessions/sessions.routes.js';
@@ -37,6 +39,7 @@ export function createApp() {
   const ragFileParser = new RagFileParserService();
   const toolOrchestrator = new ToolOrchestratorService([new RagTool(ragService)]);
   const chatService = new ChatService(gateway, contextAssembler, memoryService, cryptoService, toolOrchestrator);
+  const evalLabService = new EvalLabService(gateway, cryptoService);
 
   app.use(
     cors({
@@ -50,6 +53,7 @@ export function createApp() {
   app.use('/api/health', createHealthRouter());
   app.use('/api/auth', createAuthRouter(authService));
   app.use('/api/me/openrouter-key', requireAuth, createCredentialsRouter(cryptoService));
+  app.use('/api/evals', requireAuth, createEvalsRouter(evalLabService));
   app.use('/api/metrics', requireAuth, createMetricsRouter());
   app.use('/api/agents', requireAuth, createAgentsRouter(storageService, ragService, ragFileParser, cryptoService));
   app.use('/api', requireAuth, createSessionsRouter());

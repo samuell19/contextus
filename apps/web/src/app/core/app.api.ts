@@ -3,6 +3,11 @@ import type {
   AuthResponseDto,
   CreateAgentRequestDto,
   CreateSessionRequestDto,
+  EvalLabOverviewDto,
+  EvalBenchmarkRequestDto,
+  EvalBenchmarkResponseDto,
+  EvalRunRequestDto,
+  EvalRunResponseDto,
   KnowledgeSourceDto,
   MessageDto,
   OpenRouterKeyStatusDto,
@@ -150,6 +155,24 @@ export class AppApiService {
 
   public getRagMetricsSummary(accessToken: string) {
     return this.request<RagMetricsSummaryDto>('/metrics/rag-summary', { method: 'GET' }, accessToken);
+  }
+
+  public getEvalLabOverview(accessToken: string) {
+    return this.request<EvalLabOverviewDto>('/evals/overview', { method: 'GET' }, accessToken);
+  }
+
+  public runEvalScenario(accessToken: string, payload: EvalRunRequestDto) {
+    return this.request<EvalRunResponseDto>('/evals/run', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }, accessToken);
+  }
+
+  public runEvalBenchmark(accessToken: string, payload: EvalBenchmarkRequestDto) {
+    return this.request<EvalBenchmarkResponseDto>('/evals/benchmark', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }, accessToken);
   }
 
   public listSessions(accessToken: string, agentId: string) {

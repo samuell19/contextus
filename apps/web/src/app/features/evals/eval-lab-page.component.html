@@ -1,0 +1,380 @@
+<main class="lab-shell">
+  <app-workspace-nav
+    currentLabel="Lab"
+    [email]="auth.user()?.email ?? null"
+    [keyConfigured]="auth.hasConfiguredKey()"
+    [keyLast4]="auth.keyStatus()?.last4 ?? null"
+  ></app-workspace-nav>
+
+  <section class="lab-content">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Laboratorio demonstrativo</p>
+        <h1>Testes de RAG, memoria e abstencao</h1>
+        <p class="subtitle">
+          Esta area compara modos com o mesmo prompt, usando uma empresa ficticia e um orcamento curto de
+          contexto para evitar gasto excessivo com a sua API key.
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <app-status-badge [label]="running() ? 'Executando' : 'Pronto'" [tone]="running() ? 'info' : 'success'"></app-status-badge>
+        <button class="ghost-button" type="button" (click)="loadOverview()">Atualizar base</button>
+        <a class="ghost-button" routerLink="/home">Voltar ao chat</a>
+      </div>
+    </header>
+
+    <p *ngIf="error()" class="error">{{ error() }}</p>
+
+    <ng-container *ngIf="overview() as data">
+      <section class="hero-grid">
+        <article class="hero-card">
+          <span class="hero-label">Empresa usada nos testes</span>
+          <strong>{{ data.companyName }}</strong>
+          <p>{{ data.companyPitch }}</p>
+        </article>
+
+        <article class="hero-card">
+          <span class="hero-label">Orcamento de contexto</span>
+          <strong>{{ data.contextPolicy.maxTotalContextChars }} chars</strong>
+          <p>
+            Ate {{ data.contextPolicy.maxRagChunks }} chunks, resumo com teto de
+            {{ data.contextPolicy.maxSummaryChars }} chars e {{ data.contextPolicy.maxRecentTurns }} turnos recentes.
+          </p>
+        </article>
+
+        <article class="hero-card">
+          <span class="hero-label">Custo controlado</span>
+          <strong>1 chamada por modo</strong>
+          <p>
+            O lab evita reenviar sessoes longas inteiras. Nos cenarios de memoria, ele compara o transcript
+            completo com o uso de resumo comprimido.
+          </p>
+        </article>
+      </section>
+
+      <section class="lab-grid">
+        <section class="panel scenario-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Cenarios</p>
+              <h2>Escolha um teste</h2>
+            </div>
+            <span class="count-chip">{{ data.scenarios.length }} casos</span>
+          </div>
+
+          <div class="scenario-list">
+            <button
+              *ngFor="let scenario of data.scenarios; trackBy: trackById"
+              class="scenario-card"
+              [class.active]="selectedScenarioId() === scenario.id"
+              type="button"
+              (click)="selectScenario(scenario.id)"
+            >
+              <span class="scenario-kind">{{ scenario.category }}</span>
+              <strong>{{ scenario.title }}</strong>
+              <p>{{ scenario.goal }}</p>
+            </button>
+          </div>
+        </section>
+
+        <section class="panel detail-panel" *ngIf="selectedScenario() as scenario">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Prompt do teste</p>
+              <h2>{{ scenario.title }}</h2>
+            </div>
+            <span class="count-chip">{{ scenario.documentIds.length }} docs</span>
+          </div>
+
+          <article class="prompt-card">
+            <span class="prompt-label">Pergunta controlada</span>
+            <p>{{ scenario.prompt }}</p>
+          </article>
+
+          <div class="detail-grid">
+            <article class="info-card">
+              <span>Objetivo</span>
+              <p>{{ scenario.goal }}</p>
+            </article>
+
+            <article class="info-card">
+              <span>Por que esse caso importa</span>
+              <p>{{ scenario.whyItMatters }}</p>
+            </article>
+
+            <article class="info-card">
+              <span>Comportamento esperado</span>
+              <p>{{ scenario.expectedBehavior }}</p>
+            </article>
+
+            <article class="info-card">
+              <span>Tipo de situacao</span>
+              <p>{{ scenario.hasConversationSeed ? 'Inclui sessao longa comprimida' : 'Pergunta pontual em base fechada' }}</p>
+            </article>
+          </div>
+
+          <div class="mode-box">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Modos</p>
+                <h3>Comparacao da rodada</h3>
+              </div>
+              <span class="hint">{{ selectedModes().length }} chamada(s) de API</span>
+            </div>
+
+            <label *ngFor="let mode of data.modes; trackBy: trackById" class="mode-option">
+              <input
+                type="checkbox"
+                [checked]="isModeChecked(mode.id)"
+                (change)="toggleMode(mode.id, $any($event.target).checked)"
+              />
+              <span>
+                <strong>{{ mode.label }}</strong>
+                <small>{{ mode.description }}</small>
+              </span>
+            </label>
+
+            <button class="primary-button" type="button" [disabled]="running()" (click)="runSelectedScenario()">
+              {{ running() ? 'Executando comparacao...' : 'Rodar comparacao' }}
+            </button>
+
+            <button class="ghost-button benchmark-button" type="button" [disabled]="running()" (click)="runBenchmark()">
+              {{ running() ? 'Aguarde...' : 'Rodar benchmark completo' }}
+            </button>
+
+            <p class="hint">Benchmark completo: {{ benchmarkCalls() }} chamada(s) para comparar essas metricas nos cenarios do lab.</p>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel results-panel" *ngIf="result() as run">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Resultados</p>
+            <h2>{{ run.scenario.title }}</h2>
+          </div>
+          <span class="hint" *ngIf="run.fullTranscriptTokens > 0">Transcript completo estimado: {{ run.fullTranscriptTokens }} tokens</span>
+        </div>
+
+        <article class="summary-banner">
+          <div class="summary-copy">
+            <span class="hero-label">Leitura rapida</span>
+            <strong>{{ getComparisonHeadline(run) }}</strong>
+            <p>{{ getComparisonNarrative(run) }}</p>
+          </div>
+
+          <div class="winner-box" *ngIf="getBestResult(run) as best">
+            <span class="hero-label">Melhor equilibrio</span>
+            <strong>{{ best.label }}</strong>
+            <p>{{ best.estimatedPromptTokens }} tok de prompt e {{ best.latencyMs }} ms neste teste.</p>
+          </div>
+        </article>
+
+        <div class="results-grid">
+          <article *ngFor="let modeResult of run.results" class="result-card">
+            <div class="result-top">
+              <div>
+                <span class="result-mode">{{ modeResult.label }}</span>
+                <h3>{{ modeResult.score.label }}</h3>
+              </div>
+              <app-status-badge
+                [label]="modeResult.score.passed ? 'Passou' : 'Falhou'"
+                [tone]="modeResult.score.passed ? 'success' : 'warning'"
+              ></app-status-badge>
+            </div>
+
+            <div class="story-grid">
+              <div class="story-card">
+                <span class="answer-label">Como esse modo rodou</span>
+                <p>{{ describeModeSetup(modeResult) }}</p>
+              </div>
+              <div class="story-card">
+                <span class="answer-label">O que aconteceu</span>
+                <p>{{ describeModeOutcome(modeResult) }}</p>
+              </div>
+            </div>
+
+            <div class="pill-row">
+              <span class="summary-pill">{{ modeResult.canAnswer ? 'Respondeu' : 'Preferiu nao responder' }}</span>
+              <span class="summary-pill">{{ modeResult.usedSources.length ? modeResult.usedSources.length + ' fonte(s) externa(s)' : 'Sem fonte externa' }}</span>
+              <span class="summary-pill">{{ modeResult.includedSummary ? 'Com resumo' : 'Sem resumo' }}</span>
+              <span class="summary-pill" *ngIf="modeResult.includedRecentTurns > 0">{{ modeResult.includedRecentTurns }} turno(s) recente(s)</span>
+              <span class="summary-pill">{{ modeResult.score.hallucinationRisk ? 'Risco maior' : 'Risco controlado' }}</span>
+            </div>
+
+            <div class="answer-box">
+              <span class="answer-label">Resposta do modelo</span>
+              <p>{{ getReadableAnswer(modeResult) }}</p>
+            </div>
+
+            <details class="context-details">
+              <summary>Ver detalhes tecnicos</summary>
+
+              <div class="stats-grid">
+                <div>
+                  <span>Latencia</span>
+                  <strong>{{ modeResult.latencyMs }} ms</strong>
+                </div>
+                <div>
+                  <span>Prompt</span>
+                  <strong>{{ modeResult.estimatedPromptTokens }} tok</strong>
+                </div>
+                <div>
+                  <span>Resposta</span>
+                  <strong>{{ modeResult.estimatedResponseTokens }} tok</strong>
+                </div>
+                <div>
+                  <span>Economia</span>
+                  <strong>{{ modeResult.savedTranscriptTokens }} tok</strong>
+                </div>
+              </div>
+
+              <div class="chip-row">
+                <span class="chip" *ngFor="let source of modeResult.usedSources">{{ source.title }}</span>
+                <span class="chip muted" *ngIf="!modeResult.usedSources.length">Sem chunk externo</span>
+              </div>
+
+              <div class="chip-row">
+                <span class="chip" *ngFor="let citation of modeResult.citations">{{ citation }}</span>
+                <span class="chip muted" *ngIf="!modeResult.citations.length">Sem citacao</span>
+              </div>
+
+              <article class="context-note" *ngIf="modeResult.contextSections.length === 0">
+                <span>Nenhuma camada extra de contexto foi adicionada neste modo.</span>
+              </article>
+
+              <article *ngFor="let section of modeResult.contextSections" class="context-section">
+                <span>{{ section.title }}</span>
+                <pre>{{ section.content }}</pre>
+              </article>
+            </details>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel benchmark-panel" *ngIf="benchmark() as summary">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Metricas principais</p>
+            <h2>Benchmark completo do laboratorio</h2>
+          </div>
+          <span class="hint">{{ summary.scenarioCount }} cenarios x {{ selectedModes().length }} modos</span>
+        </div>
+
+        <article class="summary-banner">
+          <div class="summary-copy">
+            <span class="hero-label">O que foi medido</span>
+            <strong>Acerto, abstencao correta, alucinacao, latencia, tokens e economia de contexto.</strong>
+            <p>Esse bloco resume os cenarios do laboratorio inteiro, em vez de olhar uma pergunta isolada.</p>
+          </div>
+
+          <div class="winner-box" *ngIf="getBenchmarkWinner(summary) as winner">
+            <span class="hero-label">Melhor no benchmark</span>
+            <strong>{{ winner.label }}</strong>
+            <p>{{ formatPercent(winner.accuracyRate) }} de acerto com {{ winner.avgPromptTokens }} tok de prompt, em media.</p>
+          </div>
+        </article>
+
+        <div class="results-grid">
+          <article *ngFor="let mode of summary.modeSummaries" class="result-card">
+            <div class="result-top">
+              <div>
+                <span class="result-mode">{{ mode.label }}</span>
+                <h3>{{ formatPercent(mode.accuracyRate) }} de acerto</h3>
+                <p class="hint">{{ benchmarkScenarioCountCopy(mode) }}</p>
+              </div>
+              <app-status-badge
+                [label]="getBenchmarkWinner(summary)?.mode === mode.mode ? 'Melhor equilibrio' : 'Comparado'"
+                [tone]="getBenchmarkWinner(summary)?.mode === mode.mode ? 'success' : 'info'"
+              ></app-status-badge>
+            </div>
+
+            <p class="score-copy">{{ describeBenchmark(mode) }}</p>
+
+            <div class="stats-grid">
+              <div>
+                <span>Acerto</span>
+                <strong>{{ formatPercent(mode.accuracyRate) }}</strong>
+              </div>
+              <div>
+                <span>Abstencao correta</span>
+                <strong>{{ formatPercent(mode.correctAbstentionRate) }}</strong>
+              </div>
+              <div>
+                <span>Alucinacao</span>
+                <strong>{{ formatPercent(mode.hallucinationRate) }}</strong>
+              </div>
+              <div>
+                <span>Latencia media</span>
+                <strong>{{ mode.avgLatencyMs }} ms</strong>
+              </div>
+              <div>
+                <span>Prompt medio</span>
+                <strong>{{ mode.avgPromptTokens }} tok</strong>
+              </div>
+              <div>
+                <span>Economia media</span>
+                <strong>{{ mode.avgContextSavingsTokens }} tok</strong>
+              </div>
+            </div>
+
+            <details class="context-details benchmark-history">
+              <summary>Ver historico detalhado do benchmark</summary>
+
+              <div class="history-list">
+                <article *ngFor="let item of mode.scenarioHistory" class="history-card">
+                  <div class="history-top">
+                    <div>
+                      <span class="history-kind">{{ categoryLabel(item.category) }}</span>
+                      <strong>{{ item.title }}</strong>
+                    </div>
+                    <app-status-badge
+                      [label]="item.passed ? 'Passou' : 'Falhou'"
+                      [tone]="item.passed ? 'success' : 'warning'"
+                    ></app-status-badge>
+                  </div>
+
+                  <p class="score-copy">{{ item.scoreLabel }}. {{ item.scoreDetails }}</p>
+
+                  <div class="pill-row">
+                    <span class="summary-pill">{{ item.promptTokens }} tok</span>
+                    <span class="summary-pill">{{ item.latencyMs }} ms</span>
+                    <span class="summary-pill">{{ item.contextSavingsTokens }} tok poupados</span>
+                    <span class="summary-pill">{{ item.hallucinationRisk ? 'Risco maior' : 'Risco controlado' }}</span>
+                  </div>
+
+                  <div class="answer-box compact-answer">
+                    <span class="answer-label">Resposta resumida</span>
+                    <p>{{ item.answerPreview }}</p>
+                  </div>
+                </article>
+              </div>
+            </details>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel docs-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Base controlada</p>
+            <h2>Documentos da empresa ficticia</h2>
+          </div>
+          <span class="hint">{{ data.documents.length }} fontes</span>
+        </div>
+
+        <details class="context-details docs-details">
+          <summary>Ver documentos da base controlada</summary>
+
+          <div class="docs-grid">
+            <article *ngFor="let document of data.documents; trackBy: trackById" class="doc-card">
+              <strong>{{ document.title }}</strong>
+              <p>{{ document.summary }}</p>
+            </article>
+          </div>
+        </details>
+      </section>
+    </ng-container>
+  </section>
+</main>

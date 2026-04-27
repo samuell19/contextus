@@ -155,6 +155,147 @@ export const ragMetricsSummarySchema = z.object({
   })
 });
 
+export const evalModeIdSchema = z.enum([
+  'llm_puro',
+  'memoria_resumida',
+  'rag_enxuto',
+  'rag_memoria'
+]);
+
+export const evalModeSchema = z.object({
+  id: evalModeIdSchema,
+  label: z.string(),
+  description: z.string()
+});
+
+export const evalContextPolicySchema = z.object({
+  approxCharsPerToken: z.number().int().positive(),
+  maxRecentTurns: z.number().int().nonnegative(),
+  maxSummaryChars: z.number().int().nonnegative(),
+  maxRagChunks: z.number().int().nonnegative(),
+  maxChunkChars: z.number().int().nonnegative(),
+  maxTotalContextChars: z.number().int().positive()
+});
+
+export const evalDocPreviewSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  summary: z.string()
+});
+
+export const evalScenarioCategorySchema = z.enum([
+  'factual',
+  'unanswerable',
+  'conflicting',
+  'multi_document',
+  'long_session'
+]);
+
+export const evalScenarioSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  category: evalScenarioCategorySchema,
+  goal: z.string(),
+  prompt: z.string(),
+  whyItMatters: z.string(),
+  expectedBehavior: z.string(),
+  recommendedModes: z.array(evalModeIdSchema),
+  documentIds: z.array(z.string()),
+  hasConversationSeed: z.boolean()
+});
+
+export const evalLabOverviewSchema = z.object({
+  companyName: z.string(),
+  companyPitch: z.string(),
+  contextPolicy: evalContextPolicySchema,
+  modes: z.array(evalModeSchema),
+  documents: z.array(evalDocPreviewSchema),
+  scenarios: z.array(evalScenarioSchema)
+});
+
+export const evalRunRequestSchema = z.object({
+  scenarioId: z.string().min(1),
+  modes: z.array(evalModeIdSchema).min(1).max(4).optional()
+});
+
+export const evalContextSectionSchema = z.object({
+  kind: z.enum(['summary', 'recent_turns', 'rag_chunk']),
+  title: z.string(),
+  content: z.string()
+});
+
+export const evalRunScoreSchema = z.object({
+  passed: z.boolean(),
+  label: z.string(),
+  details: z.string(),
+  hallucinationRisk: z.boolean()
+});
+
+export const evalRunModeResultSchema = z.object({
+  mode: evalModeIdSchema,
+  label: z.string(),
+  answer: z.string(),
+  canAnswer: z.boolean(),
+  citations: z.array(z.string()),
+  latencyMs: z.number().int().nonnegative(),
+  estimatedPromptTokens: z.number().int().nonnegative(),
+  estimatedResponseTokens: z.number().int().nonnegative(),
+  contextChars: z.number().int().nonnegative(),
+  savedTranscriptTokens: z.number().int().nonnegative(),
+  includedSummary: z.boolean(),
+  includedRecentTurns: z.number().int().nonnegative(),
+  usedSources: z.array(evalDocPreviewSchema),
+  contextSections: z.array(evalContextSectionSchema),
+  rawOutput: z.string(),
+  score: evalRunScoreSchema
+});
+
+export const evalRunResponseSchema = z.object({
+  scenario: evalScenarioSchema,
+  fullTranscriptTokens: z.number().int().nonnegative(),
+  results: z.array(evalRunModeResultSchema)
+});
+
+export const evalBenchmarkRequestSchema = z.object({
+  modes: z.array(evalModeIdSchema).min(1).max(4),
+  scenarioIds: z.array(z.string().min(1)).min(1).optional()
+});
+
+export const evalBenchmarkScenarioHistorySchema = z.object({
+  scenarioId: z.string(),
+  title: z.string(),
+  category: evalScenarioCategorySchema,
+  passed: z.boolean(),
+  scoreLabel: z.string(),
+  scoreDetails: z.string(),
+  hallucinationRisk: z.boolean(),
+  answerPreview: z.string(),
+  latencyMs: z.number().int().nonnegative(),
+  promptTokens: z.number().int().nonnegative(),
+  contextSavingsTokens: z.number().int().nonnegative()
+});
+
+export const evalBenchmarkModeSummarySchema = z.object({
+  mode: evalModeIdSchema,
+  label: z.string(),
+  scenariosRun: z.number().int().positive(),
+  passedScenarios: z.number().int().nonnegative(),
+  failedScenarios: z.number().int().nonnegative(),
+  accuracyRate: z.number().min(0).max(1),
+  correctAbstentionRate: z.number().min(0).max(1).nullable(),
+  hallucinationRate: z.number().min(0).max(1),
+  avgLatencyMs: z.number().nonnegative(),
+  avgPromptTokens: z.number().nonnegative(),
+  avgContextSavingsTokens: z.number().nonnegative(),
+  scenarioHistory: z.array(evalBenchmarkScenarioHistorySchema)
+});
+
+export const evalBenchmarkResponseSchema = z.object({
+  scenarioCount: z.number().int().positive(),
+  totalApiCalls: z.number().int().positive(),
+  modeSummaries: z.array(evalBenchmarkModeSummarySchema)
+});
+
 export type UserDto = z.infer<typeof userSchema>;
 export type AuthTokensDto = z.infer<typeof authTokensSchema>;
 export type AuthResponseDto = z.infer<typeof authResponseSchema>;
@@ -173,6 +314,22 @@ export type ChatStreamRequestDto = z.infer<typeof chatStreamRequestSchema>;
 export type StreamChunkPayloadDto = z.infer<typeof streamChunkPayloadSchema>;
 export type KnowledgeSourceDto = z.infer<typeof knowledgeSourceSchema>;
 export type RagMetricsSummaryDto = z.infer<typeof ragMetricsSummarySchema>;
+export type EvalModeId = z.infer<typeof evalModeIdSchema>;
+export type EvalModeDto = z.infer<typeof evalModeSchema>;
+export type EvalContextPolicyDto = z.infer<typeof evalContextPolicySchema>;
+export type EvalDocPreviewDto = z.infer<typeof evalDocPreviewSchema>;
+export type EvalScenarioCategoryDto = z.infer<typeof evalScenarioCategorySchema>;
+export type EvalScenarioDto = z.infer<typeof evalScenarioSchema>;
+export type EvalLabOverviewDto = z.infer<typeof evalLabOverviewSchema>;
+export type EvalRunRequestDto = z.infer<typeof evalRunRequestSchema>;
+export type EvalContextSectionDto = z.infer<typeof evalContextSectionSchema>;
+export type EvalRunScoreDto = z.infer<typeof evalRunScoreSchema>;
+export type EvalRunModeResultDto = z.infer<typeof evalRunModeResultSchema>;
+export type EvalRunResponseDto = z.infer<typeof evalRunResponseSchema>;
+export type EvalBenchmarkRequestDto = z.infer<typeof evalBenchmarkRequestSchema>;
+export type EvalBenchmarkScenarioHistoryDto = z.infer<typeof evalBenchmarkScenarioHistorySchema>;
+export type EvalBenchmarkModeSummaryDto = z.infer<typeof evalBenchmarkModeSummarySchema>;
+export type EvalBenchmarkResponseDto = z.infer<typeof evalBenchmarkResponseSchema>;
 
 export const ownerTypeSchema = z.enum(['agent', 'session']);
 

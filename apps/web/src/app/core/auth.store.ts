@@ -73,20 +73,17 @@ export class AuthStore {
   }
 
   public async saveOpenRouterKey(apiKey: string) {
-    const token = this.requireToken();
-    const status = await this.api.saveOpenRouterKey(token, apiKey);
+    const status = await this.withFreshToken((token) => this.api.saveOpenRouterKey(token, apiKey));
     this.keyStatus.set(status);
   }
 
   public async deleteOpenRouterKey() {
-    const token = this.requireToken();
-    await this.api.deleteOpenRouterKey(token);
+    await this.withFreshToken((token) => this.api.deleteOpenRouterKey(token));
     await this.loadKeyStatus();
   }
 
   public async loadKeyStatus() {
-    const token = this.requireToken();
-    const status = await this.api.getOpenRouterKeyStatus(token);
+    const status = await this.withFreshToken((token) => this.api.getOpenRouterKeyStatus(token));
     this.keyStatus.set(status);
   }
 
@@ -108,6 +105,39 @@ export class AuthStore {
     }
 
     return token;
+  }
+
+  private async withFreshToken<T>(operation: (token: string) => Promise<T>) {
+    try {
+      return await operation(this.requireToken());
+    } catch (error) {
+      if (!this.shouldRetryWithRefresh(error)) {
+        throw error;
+      }
+
+      try {
+        await this.refreshSession();
+      } catch (refreshError) {
+        this.clearSession();
+        throw refreshError;
+      }
+
+      return operation(this.requireToken());
+    }
+  }
+
+  private shouldRetryWithRefresh(error: unknown) {
+    if (!(error instanceof Error)) {
+      return false;
+    }
+
+    const message = error.message.toLowerCase();
+
+    return (
+      message.includes('token de acesso invalido') ||
+      message.includes('token de acesso ausente') ||
+      message.includes('sessao expirada')
+    );
   }
 
   private clearSession() {

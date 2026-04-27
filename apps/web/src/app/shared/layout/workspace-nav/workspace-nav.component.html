@@ -2,32 +2,36 @@
   <div class="brand-card mb-8">
     <p class="text-[0.68rem] font-bold tracking-widest text-brand-400/80 uppercase mb-0.5">Contextus...</p>
     <h2 class="text-xl font-bold tracking-tight text-white m-0">{{ currentLabel }}</h2>
-    <p class="text-xs text-ui-400 mt-2 leading-relaxed">Automação, memória contextual e múltiplos agentes em um só workspace.</p>
+    <p class="text-xs text-ui-400 mt-2 leading-relaxed">Automacao, memoria contextual e multiplos agentes em um so workspace.</p>
   </div>
 
   <nav class="nav-card">
     <a routerLink="/home" routerLinkActive="active" class="nav-link">
       <span class="nav-title">Home</span>
-      <small>Sessões e chat</small>
+      <small>Sessoes e chat</small>
     </a>
     <a routerLink="/agents" routerLinkActive="active" class="nav-link">
       <span class="nav-title">Agentes</span>
-      <small>Catálogo e configuração</small>
+      <small>Catalogo e configuracao</small>
     </a>
     <a routerLink="/settings" routerLinkActive="active" class="nav-link">
-      <span class="nav-title">Configurações</span>
+      <span class="nav-title">Configuracoes</span>
       <small>Conta e API keys</small>
     </a>
+    <a routerLink="/evals" routerLinkActive="active" class="nav-link">
+      <span class="nav-title">Lab</span>
+      <small>Testes de RAG e memoria</small>
+    </a>
     <a routerLink="/metrics" routerLinkActive="active" class="nav-link">
-      <span class="nav-title">Métricas</span>
-      <small>RAG, latência e uso</small>
+      <span class="nav-title">Metricas</span>
+      <small>RAG, latencia e uso</small>
     </a>
   </nav>
 
   <section class="status-card">
     <div class="account-copy">
-      <span class="label">Usuário atual</span>
-      <strong>{{ email || 'Sem sessão' }}</strong>
+      <span class="label">Usuario atual</span>
+      <strong>{{ email || 'Sem sessao' }}</strong>
     </div>
 
     <app-status-badge
