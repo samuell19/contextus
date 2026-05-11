@@ -50,19 +50,19 @@ section > section:nth-of-type(1) article {
   border-radius: var(--radius) !important;
   border-color: var(--stroke) !important;
   background:
-    linear-gradient(180deg, rgba(18, 28, 25, 0.86), rgba(8, 12, 11, 0.88)) !important;
+    linear-gradient(180deg, rgba(18, 18, 22, 0.88), rgba(8, 8, 10, 0.92)) !important;
   box-shadow: var(--shadow-soft);
 }
 
 section > section:nth-of-type(1) article:hover {
-  border-color: rgba(110, 231, 190, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
 section > div[ng-reflect-ng-if],
 section > div[class*='border-dashed'] {
   border-radius: var(--radius) !important;
-  border-color: rgba(183, 195, 189, 0.14) !important;
-  background: rgba(8, 13, 12, 0.58) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(12, 12, 16, 0.62) !important;
 }
 
 section > section:last-child {

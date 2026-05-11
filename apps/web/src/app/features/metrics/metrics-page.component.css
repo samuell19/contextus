@@ -20,7 +20,7 @@ section.glass-panel {
   max-width: 1180px !important;
   border-radius: var(--radius) !important;
   background:
-    linear-gradient(180deg, rgba(18, 28, 25, 0.86), rgba(8, 12, 11, 0.92)) !important;
+    linear-gradient(180deg, rgba(18, 18, 22, 0.88), rgba(8, 8, 10, 0.94)) !important;
 }
 
 header {
@@ -54,12 +54,12 @@ article {
   border-radius: var(--radius) !important;
   border-color: var(--stroke) !important;
   background:
-    linear-gradient(180deg, rgba(17, 27, 24, 0.82), rgba(5, 9, 8, 0.62)) !important;
+    linear-gradient(180deg, rgba(18, 18, 24, 0.84), rgba(9, 9, 12, 0.68)) !important;
   box-shadow: var(--shadow-soft);
 }
 
 article:hover {
-  border-color: rgba(110, 231, 190, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
 section > div[class*='h-px'] {

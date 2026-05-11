@@ -8,29 +8,29 @@
   ></app-workspace-nav>
 
   <div class="flex-1 flex flex-col p-4 md:p-8 h-screen overflow-y-auto custom-scrollbar relative">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(124,58,237,0.1),transparent_50%)] pointer-events-none"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.08),transparent_50%)] pointer-events-none"></div>
 
     <section class="max-w-4xl mx-auto w-full flex flex-col gap-8 relative z-10">
       <header class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-white/5">
         <div>
-          <p class="text-[0.76rem] font-bold tracking-[0.18em] text-brand-400 uppercase mb-2">Configuração dedicada</p>
+          <p class="text-[0.76rem] font-bold tracking-[0.18em] text-brand-400 uppercase mb-2">Configuracao dedicada</p>
           <h1 class="text-3xl md:text-4xl tracking-tight font-bold text-white max-w-xl mb-2">{{ isEditing() ? 'Editar agente' : 'Criar novo agente' }}</h1>
           <p class="text-[0.98rem] text-ui-400">
-            Esta tela fica focada só na identidade e nas regras do agente, sem misturar conversa, lista e manutenção.
+            Esta tela fica focada so na identidade e nas regras do agente, sem misturar conversa, lista e manutencao.
           </p>
         </div>
 
         <div class="flex items-center gap-3 shrink-0 pb-1">
-          <app-status-badge [label]="isEditing() ? 'Modo edição' : 'Novo agente'" tone="info"></app-status-badge>
+          <app-status-badge [label]="isEditing() ? 'Modo edicao' : 'Novo agente'" tone="info"></app-status-badge>
           <button class="btn-ghost shadow-sm !px-3 !py-1.5" type="button" (click)="goBack()">Voltar</button>
-          <button class="btn-primary flex items-center gap-2 shadow-xl shadow-brand-500/20 !px-4 !py-1.5" type="button" [disabled]="!isEditing()" (click)="openChat()">
+          <button class="btn-primary flex items-center gap-2 shadow-xl shadow-black/30 !px-4 !py-1.5" type="button" [disabled]="!isEditing()" (click)="openChat()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" class="shrink-0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
             Abrir chat
           </button>
         </div>
       </header>
 
-      <div *ngIf="message()" class="p-4 rounded-2xl bg-green-900/20 border border-green-500/20 text-green-300 text-sm flex items-center gap-2 animate-fade-in shadow-inner">
+      <div *ngIf="message()" class="p-4 rounded-2xl bg-white/5 border border-white/10 text-ui-100 text-sm flex items-center gap-2 animate-fade-in shadow-inner">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" class="shrink-0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
         {{ message() }}
       </div>
@@ -53,7 +53,7 @@
         </div>
 
         <div class="flex-1 min-w-0">
-          <span class="text-xs font-semibold uppercase tracking-wider text-ui-400">Visão rápida</span>
+          <span class="text-xs font-semibold uppercase tracking-wider text-ui-400">Visao rapida</span>
           <strong class="block text-xl font-bold text-white mt-1 mb-1 truncate">{{ agentName || 'Novo agente' }}</strong>
           <p class="text-sm text-ui-400 line-clamp-2 leading-relaxed">
             {{ agentSystemPrompt || 'Defina o papel, o tom e as regras principais do agente para deixar o chat mais consistente.' }}
@@ -62,7 +62,7 @@
 
         <div class="hidden sm:flex flex-col items-end shrink-0 pl-6 border-l border-white/5">
           <span class="text-xs font-semibold uppercase tracking-wider text-ui-400">Modelo</span>
-          <strong class="text-[0.98rem] text-ui-200 mt-1 max-w-[150px] truncate">{{ agentDefaultModel || 'Padrão global' }}</strong>
+          <strong class="text-[0.98rem] text-ui-200 mt-1 max-w-[150px] truncate">{{ agentDefaultModel || 'Padrao global' }}</strong>
         </div>
       </section>
 
@@ -85,7 +85,7 @@
         [agentDefaultModel]="agentDefaultModel"
         [agentRagEnabled]="agentRagEnabled"
         [agentRagTopK]="agentRagTopK"
-        [closeLabel]="'Voltar ao catálogo'"
+        [closeLabel]="'Voltar ao catalogo'"
         (close)="goBack()"
         (deleteAgent)="removeAgent()"
         (saveAgent)="saveAgent()"
@@ -99,29 +99,29 @@
 
       <section class="border border-white/10 rounded-[32px] bg-ui-900/60 p-6 md:p-8 flex flex-col gap-6 shadow-inner" *ngIf="isEditing()">
         <div class="border-b border-white/5 pb-4">
-          <p class="text-[0.76rem] font-bold tracking-[0.18em] text-cyan-400 uppercase mb-1">RAG</p>
+          <p class="text-[0.76rem] font-bold tracking-[0.18em] text-ui-300 uppercase mb-1">RAG</p>
           <h3 class="text-xl font-bold text-white mb-1">Fontes de conhecimento</h3>
           <p class="text-sm text-ui-400">Envie arquivos para serem vetorizados e usados pelo agente quando o RAG estiver ativo.</p>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center gap-4 p-4 border border-white/5 border-dashed rounded-2xl bg-ui-800/20">
-          <input type="file" accept=".txt,.md,.csv,.json,.pdf,text/*,application/json,application/pdf" 
-                 class="w-full text-sm text-ui-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-ui-800 hover:file:bg-ui-700 file:text-white transition-colors" 
+          <input type="file" accept=".txt,.md,.csv,.json,.pdf,text/*,application/json,application/pdf"
+                 class="w-full text-sm text-ui-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-ui-800 hover:file:bg-ui-700 file:text-white transition-colors"
                  (change)="onKnowledgeFileSelected($event)" />
-          
+
           <button class="btn-primary shrink-0 w-full sm:w-auto shadow-md" type="button" [disabled]="knowledgeUploading()" (click)="uploadKnowledgeSource()">
             {{ knowledgeUploading() ? 'Enviando...' : 'Enviar e indexar' }}
           </button>
         </div>
 
-        <p class="text-sm text-cyan-400 font-medium animate-pulse" *ngIf="knowledgeUploadStatus()">{{ knowledgeUploadStatus() }}</p>
+        <p class="text-sm text-ui-300 font-medium animate-pulse" *ngIf="knowledgeUploadStatus()">{{ knowledgeUploadStatus() }}</p>
 
         <ul class="flex flex-col gap-3" *ngIf="knowledgeSources().length; else emptyKnowledge">
           <li *ngFor="let source of knowledgeSources()" class="p-4 rounded-2xl bg-ui-800/40 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-ui-600/50 transition-colors">
             <div class="min-w-0">
               <strong class="block text-[0.98rem] text-white truncate mb-1">{{ source.fileName }}</strong>
               <p class="text-[0.8rem] text-ui-400 flex items-center gap-2 flex-wrap">
-                <span class="px-2 py-0.5 rounded-md bg-ui-800 border border-white/5" [ngClass]="{'text-green-300': source.status === 'indexed', 'text-yellow-300': source.status === 'pending', 'text-red-300': source.status === 'error'}">
+                <span class="px-2 py-0.5 rounded-md bg-ui-800 border border-white/5" [ngClass]="{'text-ui-100': source.status === 'indexed', 'text-yellow-300': source.status === 'pending', 'text-red-300': source.status === 'error'}">
                   Status: {{ source.status }}
                 </span>
                 <span>• Chunks: {{ source.chunkCount }}</span>

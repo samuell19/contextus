@@ -1,7 +1,7 @@
 .sidebar {
   min-height: 100%;
   border-right: 1px solid var(--stroke);
-  background: linear-gradient(180deg, rgba(12, 18, 16, 0.96), rgba(5, 8, 7, 0.98));
+  background: linear-gradient(180deg, rgba(12, 12, 16, 0.96), rgba(4, 4, 6, 0.98));
   padding: 18px 14px;
   display: flex;
   flex-direction: column;
@@ -15,7 +15,7 @@
 .empty-card {
   border: 1px solid var(--stroke);
   border-radius: var(--radius);
-  background: rgba(13, 20, 18, 0.72);
+  background: rgba(15, 15, 18, 0.74);
 }
 
 .brand-card,
@@ -79,8 +79,8 @@ h2 {
 .icon-button {
   width: 40px;
   height: 40px;
-  border: 1px solid rgba(110, 231, 190, 0.34);
-  background: rgba(16, 33, 28, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(24, 24, 30, 0.96);
   color: var(--brand-strong);
   font-size: 1.25rem;
 }
@@ -88,7 +88,7 @@ h2 {
 .ghost-button {
   padding: 10px 14px;
   border: 1px solid var(--stroke);
-  background: rgba(5, 9, 8, 0.54);
+  background: rgba(255, 255, 255, 0.03);
   color: var(--text-soft);
   font-weight: 700;
 }
@@ -104,22 +104,22 @@ h2 {
   gap: 12px;
   text-align: left;
   align-items: center;
-  background: rgba(5, 9, 8, 0.44);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid transparent;
 }
 
 .agent-card.active {
   background:
-    linear-gradient(90deg, rgba(59, 212, 168, 0.13), rgba(125, 211, 252, 0.04)),
-    rgba(11, 22, 18, 0.82);
-  border-color: rgba(110, 231, 190, 0.24);
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    rgba(16, 16, 22, 0.86);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .avatar {
   width: 48px;
   height: 48px;
   border-radius: var(--radius);
-  background: linear-gradient(135deg, rgba(59, 212, 168, 0.24), rgba(125, 211, 252, 0.12));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(120, 120, 138, 0.16));
   display: grid;
   place-items: center;
   overflow: hidden;

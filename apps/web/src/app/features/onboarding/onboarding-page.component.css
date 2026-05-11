@@ -14,16 +14,16 @@ main {
 main > section {
   border-radius: var(--radius) !important;
   border: 1px solid var(--stroke) !important;
-  background: rgba(12, 18, 16, 0.84) !important;
+  background: rgba(11, 11, 14, 0.86) !important;
   box-shadow: var(--shadow-soft);
 }
 
 main > section:first-child {
   min-height: calc(100vh - 36px);
   background:
-    linear-gradient(120deg, rgba(59, 212, 168, 0.12), transparent 42%),
-    linear-gradient(300deg, rgba(125, 211, 252, 0.09), transparent 36%),
-    linear-gradient(180deg, rgba(18, 28, 25, 0.92), rgba(5, 8, 7, 0.96)) !important;
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.1), transparent 28%),
+    radial-gradient(circle at 82% 20%, rgba(255, 255, 255, 0.05), transparent 24%),
+    linear-gradient(180deg, rgba(18, 18, 22, 0.95), rgba(5, 5, 7, 0.98)) !important;
 }
 
 p[class*='tracking'] {
@@ -49,19 +49,19 @@ span {
 
 article {
   border-radius: var(--radius) !important;
-  border-color: rgba(183, 195, 189, 0.12) !important;
-  background: rgba(5, 9, 8, 0.48) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
   transition: transform 180ms ease, border-color 180ms ease;
 }
 
 article:hover {
   transform: translateY(-2px);
-  border-color: rgba(110, 231, 190, 0.24) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
 }
 
 main > section:last-child {
   align-self: center;
-  background: linear-gradient(180deg, rgba(17, 25, 23, 0.92), rgba(8, 12, 11, 0.94)) !important;
+  background: linear-gradient(180deg, rgba(16, 16, 20, 0.94), rgba(8, 8, 10, 0.96)) !important;
 }
 
 textarea {

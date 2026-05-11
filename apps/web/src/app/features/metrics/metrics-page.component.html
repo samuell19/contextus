@@ -8,7 +8,7 @@
   ></app-workspace-nav>
 
   <div class="flex-1 flex flex-col p-4 md:p-8 h-screen overflow-y-auto custom-scrollbar relative">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(124,58,237,0.1),transparent_50%)] pointer-events-none"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.08),transparent_50%)] pointer-events-none"></div>
 
     <section class="glass-panel max-w-6xl mx-auto w-full rounded-[32px] p-6 md:p-10 flex flex-col gap-8 relative z-10">
       <header class="flex flex-col md:flex-row md:items-start justify-between gap-6 pb-6 border-b border-white/5">
@@ -37,32 +37,32 @@
       <ng-container *ngIf="metrics() as m">
         <!-- Main KPI Grid -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <article class="p-5 border border-white/10 rounded-2xl bg-gradient-to-br from-ui-800/60 to-ui-900/40 backdrop-blur-sm shadow-sm flex flex-col gap-1 hover:border-brand-500/30 transition-colors">
+          <article class="p-5 border border-white/10 rounded-2xl bg-gradient-to-br from-ui-800/60 to-ui-900/40 backdrop-blur-sm shadow-sm flex flex-col gap-1 hover:border-white/12 transition-colors">
             <span class="text-sm font-medium text-ui-400">Uploads recebidos</span>
             <strong class="text-3xl font-bold text-white my-1">{{ m.totalUploads }}</strong>
             <small class="text-xs text-red-400/80 font-medium tracking-wide">Falhas: {{ m.uploadFailures }}</small>
           </article>
 
-          <article class="p-5 border border-white/10 rounded-2xl bg-gradient-to-br from-ui-800/60 to-ui-900/40 backdrop-blur-sm shadow-sm flex flex-col gap-1 hover:border-brand-500/30 transition-colors">
+          <article class="p-5 border border-white/10 rounded-2xl bg-gradient-to-br from-ui-800/60 to-ui-900/40 backdrop-blur-sm shadow-sm flex flex-col gap-1 hover:border-white/12 transition-colors">
             <span class="text-sm font-medium text-ui-400">Fontes indexadas</span>
             <strong class="text-3xl font-bold text-white my-1">{{ m.indexedSources }}</strong>
             <small class="text-xs text-ui-500 font-medium tracking-wide">Chunks totais: {{ m.indexedChunks }}</small>
           </article>
 
-          <article class="p-5 border border-white/10 rounded-2xl bg-gradient-to-br from-ui-800/60 to-ui-900/40 backdrop-blur-sm shadow-sm flex flex-col gap-1 hover:border-brand-500/30 transition-colors">
+          <article class="p-5 border border-white/10 rounded-2xl bg-gradient-to-br from-ui-800/60 to-ui-900/40 backdrop-blur-sm shadow-sm flex flex-col gap-1 hover:border-white/12 transition-colors">
             <span class="text-sm font-medium text-ui-400">Chunks por fonte</span>
             <strong class="text-3xl font-bold text-white my-1">{{ m.avgChunksPerSource }}</strong>
             <small class="text-xs text-ui-500 font-medium tracking-wide">Média de indexação</small>
           </article>
 
-          <article class="p-5 border border-brand-500/20 rounded-2xl bg-gradient-to-br from-brand-900/20 to-ui-900/40 backdrop-blur-sm shadow-sm flex flex-col gap-1 hover:border-brand-500/40 transition-colors">
-            <span class="text-sm font-medium text-brand-300">Retrieval hit-rate</span>
+          <article class="p-5 border border-white/10 rounded-2xl bg-gradient-to-br from-white/6 to-ui-900/40 backdrop-blur-sm shadow-sm flex flex-col gap-1 hover:border-white/14 transition-colors">
+            <span class="text-sm font-medium text-ui-200">Retrieval hit-rate</span>
             <strong class="text-3xl font-bold text-white my-1">{{ retrievalHitRatePercent() }}</strong>
             <small class="text-xs text-ui-500 font-medium tracking-wide">Calls: {{ m.retrievalCalls }}</small>
           </article>
 
-          <article class="p-5 border border-cyan-500/20 rounded-2xl bg-gradient-to-br from-cyan-900/20 to-ui-900/40 backdrop-blur-sm shadow-sm flex flex-col gap-1 hover:border-cyan-500/40 transition-colors">
-            <span class="text-sm font-medium text-cyan-300">Uso do RAG no chat</span>
+          <article class="p-5 border border-white/10 rounded-2xl bg-gradient-to-br from-white/5 to-ui-900/40 backdrop-blur-sm shadow-sm flex flex-col gap-1 hover:border-white/14 transition-colors">
+            <span class="text-sm font-medium text-ui-200">Uso do RAG no chat</span>
             <strong class="text-3xl font-bold text-white my-1">{{ ragUsagePercent() }}</strong>
             <small class="text-xs text-ui-500 font-medium tracking-wide">Turns com contexto: {{ m.chatTurnsWithRagContext }}/{{ m.chatTurns }}</small>
           </article>

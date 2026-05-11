@@ -1,50 +1,48 @@
 <main class="min-h-screen grid grid-cols-1 lg:grid-cols-[1.3fr_minmax(360px,430px)] gap-8 items-stretch p-4 lg:p-8 shrink-0">
-  <!-- Hero Panel -->
   <section class="relative overflow-hidden rounded-[32px] p-8 lg:p-12 flex flex-col justify-between gap-10 bg-gradient-to-b from-ui-900/80 to-ui-950/80 border border-white/5 shadow-2xl backdrop-blur-xl">
-    <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_20%_12%,rgba(124,58,237,0.22),transparent_30%),radial-gradient(circle_at_78%_16%,rgba(59,130,246,0.2),transparent_24%),linear-gradient(180deg,transparent,rgba(7,10,19,0.4))]"></div>
-    
+    <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_20%_12%,rgba(255,255,255,0.13),transparent_30%),radial-gradient(circle_at_78%_16%,rgba(255,255,255,0.07),transparent_24%),linear-gradient(180deg,transparent,rgba(7,7,10,0.45))]"></div>
+
     <div class="relative z-10">
       <p class="text-[0.76rem] font-bold tracking-[0.18em] text-brand-400 uppercase mb-4">Multiagent Platform</p>
-      <h1 class="text-4xl lg:text-[4rem] lg:leading-[0.95] tracking-tight text-white mb-6 max-w-[14ch]">Orquestre agentes, contexto e automações em uma interface com cara de produto real.</h1>
+      <h1 class="text-4xl lg:text-[4rem] lg:leading-[0.95] tracking-tight text-white mb-6 max-w-[14ch]">Orquestre agentes, contexto e automacoes em uma interface com cara de produto real.</h1>
       <p class="text-[1.04rem] text-ui-400 max-w-[52ch] leading-relaxed">
-        Entre na plataforma, conecte sua chave do OpenRouter e comece a criar agentes com memória persistente, sessões independentes e respostas em streaming.
+        Entre na plataforma, conecte sua chave do OpenRouter e comece a criar agentes com memoria persistente, sessoes independentes e respostas em streaming.
       </p>
     </div>
 
     <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4">
       <article class="min-h-[132px] border border-white/10 rounded-[22px] p-5 flex flex-col gap-2.5 bg-ui-800/40 backdrop-blur-sm shadow-xl hover:bg-ui-800/60 transition-colors">
-        <span class="text-cyan-400 text-[0.78rem] uppercase tracking-[0.12em] font-medium">Chat em tempo real</span>
-        <strong class="text-base text-ui-200 leading-snug">Streaming token a token com histórico persistente</strong>
+        <span class="text-ui-300 text-[0.78rem] uppercase tracking-[0.12em] font-medium">Chat em tempo real</span>
+        <strong class="text-base text-ui-200 leading-snug">Streaming token a token com historico persistente</strong>
       </article>
       <article class="min-h-[132px] border border-white/10 rounded-[22px] p-5 flex flex-col gap-2.5 bg-ui-800/40 backdrop-blur-sm shadow-xl hover:bg-ui-800/60 transition-colors">
-        <span class="text-cyan-400 text-[0.78rem] uppercase tracking-[0.12em] font-medium">Multiagente</span>
+        <span class="text-ui-300 text-[0.78rem] uppercase tracking-[0.12em] font-medium">Multiagente</span>
         <strong class="text-base text-ui-200 leading-snug">Crie personas separadas com prompt, avatar e modelo</strong>
       </article>
       <article class="min-h-[132px] border border-white/10 rounded-[22px] p-5 flex flex-col gap-2.5 bg-ui-800/40 backdrop-blur-sm shadow-xl hover:bg-ui-800/60 transition-colors">
-        <span class="text-cyan-400 text-[0.78rem] uppercase tracking-[0.12em] font-medium">Memória viva</span>
-        <strong class="text-base text-ui-200 leading-snug">Resumo por agente e por sessão com foco em contexto</strong>
+        <span class="text-ui-300 text-[0.78rem] uppercase tracking-[0.12em] font-medium">Memoria viva</span>
+        <strong class="text-base text-ui-200 leading-snug">Resumo por agente e por sessao com foco em contexto</strong>
       </article>
     </div>
   </section>
 
-  <!-- Auth Card -->
   <section class="glass-panel rounded-[32px] p-8 lg:p-10 flex flex-col gap-6 relative z-10">
     <div class="flex items-start justify-between gap-4">
       <div>
         <p class="text-[0.76rem] font-bold tracking-[0.18em] text-brand-400 uppercase mb-2">Acesso</p>
         <h2 class="text-3xl tracking-tight font-bold text-white">{{ mode() === 'login' ? 'Entrar na conta' : 'Criar nova conta' }}</h2>
       </div>
-      <span class="hidden sm:inline-block px-3 py-1.5 rounded-full border border-blue-400/20 bg-blue-500/10 text-blue-300 text-[0.78rem] font-semibold">Angular + Node</span>
+      <span class="hidden sm:inline-block px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-ui-200 text-[0.78rem] font-semibold">Angular + Node</span>
     </div>
 
     <div class="grid grid-cols-2 gap-1.5 p-1.5 rounded-2xl bg-ui-900/60 border border-white/5 shadow-inner">
-      <button type="button" 
+      <button type="button"
               class="px-3 py-3 rounded-[14px] text-sm font-semibold transition-all duration-300"
-              [ngClass]="mode() === 'login' ? 'bg-gradient-to-br from-brand-600/30 to-blue-500/20 text-white shadow-[inset_0_0_0_1px_rgba(129,140,248,0.2)]' : 'text-ui-400 hover:text-white'"
+              [ngClass]="mode() === 'login' ? 'bg-gradient-to-br from-white/12 to-white/4 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]' : 'text-ui-400 hover:text-white'"
               (click)="mode.set('login')">Entrar</button>
-      <button type="button" 
+      <button type="button"
               class="px-3 py-3 rounded-[14px] text-sm font-semibold transition-all duration-300"
-              [ngClass]="mode() === 'register' ? 'bg-gradient-to-br from-brand-600/30 to-blue-500/20 text-white shadow-[inset_0_0_0_1px_rgba(129,140,248,0.2)]' : 'text-ui-400 hover:text-white'"
+              [ngClass]="mode() === 'register' ? 'bg-gradient-to-br from-white/12 to-white/4 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]' : 'text-ui-400 hover:text-white'"
               (click)="mode.set('register')">Criar conta</button>
     </div>
 
@@ -62,8 +60,8 @@
 
     <p class="text-[0.92rem] text-ui-500">
       {{ mode() === 'login'
-        ? 'Use a mesma conta para acessar seus agentes em diferentes sessões.'
-        : 'Depois do cadastro, voce já pode conectar sua API key e conversar.' }}
+        ? 'Use a mesma conta para acessar seus agentes em diferentes sessoes.'
+        : 'Depois do cadastro, voce ja pode conectar sua API key e conversar.' }}
     </p>
 
     <div *ngIf="error()" class="p-3.5 rounded-2xl bg-red-900/20 border border-red-500/20 text-red-300 text-sm flex items-center gap-2 animate-slide-up">

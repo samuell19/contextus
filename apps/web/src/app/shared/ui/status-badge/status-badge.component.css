@@ -6,7 +6,7 @@
   padding: 7px 11px;
   border: 1px solid var(--stroke);
   border-radius: 999px;
-  background: rgba(10, 16, 14, 0.78);
+  background: rgba(15, 15, 18, 0.82);
   color: var(--text-soft);
   font-size: 0.76rem;
   font-weight: 800;
@@ -25,21 +25,21 @@
 }
 
 .success {
-  border-color: rgba(52, 211, 153, 0.28);
-  background: rgba(9, 45, 35, 0.74);
-  color: #a7f3d0;
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f4f4f5;
 }
 
 .info {
-  border-color: rgba(125, 211, 252, 0.26);
-  background: rgba(8, 34, 42, 0.76);
-  color: #bae6fd;
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fafafa;
 }
 
 .warning {
-  border-color: rgba(246, 193, 119, 0.28);
-  background: rgba(54, 36, 14, 0.76);
-  color: #fde68a;
+  border-color: rgba(255, 244, 214, 0.14);
+  background: rgba(42, 38, 28, 0.78);
+  color: #f5e7b0;
 }
 
 .neutral {

@@ -1,18 +1,17 @@
 <section class="flex flex-col h-full bg-ui-900/40 rounded-[28px] border border-white/5 shadow-2xl relative overflow-hidden backdrop-blur-3xl m-4 xl:m-6">
-  <!-- Header -->
   <header class="shrink-0 px-6 py-5 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-ui-900/40 backdrop-blur-md z-10">
     <div class="flex flex-col gap-1 min-w-0">
       <p class="text-[0.68rem] font-bold tracking-widest text-brand-400 uppercase">Chat</p>
       <h1 class="text-2xl font-bold tracking-tight text-white truncate">{{ selectedSessionTitle || 'Converse com seu agente' }}</h1>
       <p class="text-sm text-ui-400 truncate">
-        {{ selectedAgentName ? 'Agente ativo: ' + selectedAgentName : 'Selecione um agente e inicie uma sessão para começar' }}
+        {{ selectedAgentName ? 'Agente ativo: ' + selectedAgentName : 'Selecione um agente e inicie uma sessao para comecar' }}
       </p>
     </div>
 
     <div class="flex items-center gap-3 shrink-0 flex-wrap">
       <app-status-badge [label]="chatStatusLabel" [tone]="chatStatusTone"></app-status-badge>
-      <span class="px-3 py-1.5 rounded-full border border-blue-400/20 bg-ui-800/80 text-blue-300 text-xs font-semibold shadow-inner" *ngIf="keyLast4">
-        OpenRouter &bull;&bull;&bull;&bull; {{ keyLast4 }}
+      <span class="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-ui-200 text-xs font-semibold shadow-inner" *ngIf="keyLast4">
+        OpenRouter •••• {{ keyLast4 }}
       </span>
       <a class="btn-ghost !px-3 !py-1.5 text-sm" routerLink="/agents">Catalogo</a>
     </div>
@@ -26,7 +25,7 @@
 
     <div class="w-full h-2 rounded-full bg-ui-800/80 overflow-hidden border border-white/5">
       <div
-        class="h-full rounded-full bg-gradient-to-r from-brand-400 via-cyan-300 to-amber-300 transition-all duration-500"
+        class="h-full rounded-full bg-gradient-to-r from-white via-ui-300 to-ui-500 transition-all duration-500"
         [style.width]="contextUsageWidth()"
       ></div>
     </div>
@@ -35,44 +34,41 @@
       <span class="px-2.5 py-1 rounded-full border border-white/8 bg-ui-800/70 text-ui-300">
         {{ contextUsagePercent() }}% do limite
       </span>
-      <span class="px-2.5 py-1 rounded-full border border-brand-500/20 bg-brand-500/10 text-brand-200" *ngFor="let indicator of contextIndicators()">
+      <span class="px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-ui-200" *ngFor="let indicator of contextIndicators()">
         {{ indicator }}
       </span>
-      <span class="px-2.5 py-1 rounded-full border border-amber-400/20 bg-amber-400/10 text-amber-200" *ngIf="hasContextCompaction()">
+      <span class="px-2.5 py-1 rounded-full border border-white/12 bg-white/8 text-white" *ngIf="hasContextCompaction()">
         Sessao compactada
       </span>
     </div>
   </div>
 
-  <!-- Messages Area -->
   <div #scrollContainer class="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar flex flex-col space-y-6 scroll-smooth z-0 relative pb-4">
     <article *ngFor="let message of messages; trackBy: trackById"
              class="max-w-[90%] md:max-w-3xl flex flex-col gap-1.5 animate-slide-up"
              [ngClass]="message.role === 'user' ? 'self-end items-end' : 'self-start items-start'">
-      
-      <span class="text-[0.65rem] font-bold tracking-widest uppercase text-ui-500 px-2" [ngClass]="message.role === 'user' ? 'text-brand-400' : ''">
-        {{ message.role === 'user' ? 'Você' : 'Agente' }}
+
+      <span class="text-[0.65rem] font-bold tracking-widest uppercase text-ui-500 px-2" [ngClass]="message.role === 'user' ? 'text-ui-300' : ''">
+        {{ message.role === 'user' ? 'Voce' : 'Agente' }}
       </span>
 
       <div *ngIf="message.role === 'assistant' && message.transientLogs?.length > 0" class="mb-1 mt-1 flex flex-col gap-2 p-4 rounded-xl border border-ui-700 bg-ui-800/60 backdrop-blur-md w-full md:min-w-[400px] animate-fade-in shadow-inner">
-        <p class="text-[0.65rem] font-bold text-brand-400 tracking-wider uppercase flex items-center gap-2 mb-1">
+        <p class="text-[0.65rem] font-bold text-ui-300 tracking-wider uppercase flex items-center gap-2 mb-1">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
-          Logs do Agente
+          Logs do agente
         </p>
-        
+
         <ng-container *ngFor="let log of message.transientLogs">
-          <!-- Text Log -->
           <div *ngIf="log.event === 'log'" class="flex items-center gap-2 text-xs text-ui-300">
-            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shrink-0"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse shrink-0"></span>
             {{ log.data }}
           </div>
-          
-          <!-- RAG Chunks Accordion -->
+
           <div *ngIf="log.event === 'rag_chunks'" class="mt-1 flex flex-col gap-2">
             <details *ngFor="let chunk of log.data; let i = index" class="group border border-white/5 bg-ui-900/50 hover:bg-ui-900 rounded-lg open:shadow-md transition-colors overflow-hidden">
               <summary class="cursor-pointer text-xs font-medium text-ui-300 hover:text-white select-none p-2.5 flex items-center justify-between">
                 <span>Fragmento {{ i + 1 }}</span>
-                <span class="text-[0.6rem] font-mono bg-brand-900/40 text-brand-400 px-2 py-0.5 rounded-md border border-brand-500/20">Score: {{ chunk.score | number:'1.2-4' }}</span>
+                <span class="text-[0.6rem] font-mono bg-ui-950/80 text-ui-200 px-2 py-0.5 rounded-md border border-white/8">Score: {{ chunk.score | number:'1.2-4' }}</span>
               </summary>
               <div class="px-3 pb-3 text-[0.7rem] text-ui-400 whitespace-pre-wrap leading-relaxed border-t border-white/5 pt-2">
                 {{ chunk.content }}
@@ -84,15 +80,14 @@
 
       <ng-container *ngIf="message.content; else typingState">
         <div class="px-5 py-3.5 shadow-md max-w-none break-words leading-relaxed flex flex-col gap-3"
-             [ngClass]="message.role === 'user' ? 'bg-gradient-to-br from-brand-600 to-brand-700 text-white rounded-2xl rounded-tr-sm' : 'bg-ui-800/80 border border-white/5 text-ui-100 rounded-2xl rounded-tl-sm backdrop-blur-md'">
-             
-          <div class="prose prose-invert prose-p:my-1 prose-headings:mb-2 prose-headings:mt-3 prose-a:text-brand-400 text-sm" [innerHTML]="renderMessageContent(message)"></div>
+             [ngClass]="message.role === 'user' ? 'bg-gradient-to-br from-ui-600 to-ui-700 text-white rounded-2xl rounded-tr-sm' : 'bg-ui-800/80 border border-white/5 text-ui-100 rounded-2xl rounded-tl-sm backdrop-blur-md'">
 
-          <!-- Persisted RAG Logs Dropdown (Inside Message Bubble) -->
-          <details *ngIf="message.role === 'assistant' && message.metadata?.ragLogs?.length > 0" 
+          <div class="prose prose-invert prose-p:my-1 prose-headings:mb-2 prose-headings:mt-3 prose-a:text-ui-200 text-sm" [innerHTML]="renderMessageContent(message)"></div>
+
+          <details *ngIf="message.role === 'assistant' && message.metadata?.ragLogs?.length > 0"
                    (toggle)="forceScrollToBottom()"
                    class="group self-start border border-ui-700/50 bg-ui-900/60 transition-colors rounded-xl overflow-hidden min-w-[200px] max-w-full">
-            <summary class="cursor-pointer px-3 py-2 text-[0.65rem] font-bold text-ui-400 group-hover:text-brand-300 uppercase tracking-widest flex items-center gap-2 select-none group-open:bg-ui-950/80">
+            <summary class="cursor-pointer px-3 py-2 text-[0.65rem] font-bold text-ui-400 group-hover:text-ui-200 uppercase tracking-widest flex items-center gap-2 select-none group-open:bg-ui-950/80">
               <svg class="transition-transform group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
               <span class="group-open:hidden">Ver contexto RAG ({{ message.metadata.ragLogs.length }} passos)</span>
               <span class="hidden group-open:inline">Ocultar contexto</span>
@@ -118,34 +113,31 @@
 
       <ng-template #typingState>
         <div class="px-5 py-4 bg-ui-800/80 border border-white/5 rounded-2xl rounded-tl-sm backdrop-blur-md flex items-center gap-1.5" *ngIf="streaming && message.role === 'assistant'">
-          <div class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse-slow"></div>
-          <div class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse-slow" style="animation-delay: 0.2s"></div>
-          <div class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse-slow" style="animation-delay: 0.4s"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-white animate-pulse-slow"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-ui-300 animate-pulse-slow" style="animation-delay: 0.2s"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-ui-500 animate-pulse-slow" style="animation-delay: 0.4s"></div>
         </div>
       </ng-template>
     </article>
 
-    <!-- Empty State -->
     <div *ngIf="!messages.length" class="m-auto max-w-md text-center flex flex-col items-center justify-center p-8 text-ui-400 animate-fade-in">
       <div class="w-16 h-16 rounded-full bg-ui-800/50 border border-white/10 flex items-center justify-center mb-6 shadow-inner">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" class="text-brand-400" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
       </div>
-      <h2 class="text-xl font-bold text-white mb-2">Seu hub de agentes está no ar</h2>
-      <p class="text-sm leading-relaxed mb-6">Crie um agente, abra uma sessão e acompanhe o fluxo de resposta em tempo real com memória persistente.</p>
-      
-      <a *ngIf="!hasAgents" class="inline-flex items-center px-4 py-2 font-semibold text-blue-300 bg-blue-500/10 border border-blue-500/20 rounded-xl hover:bg-blue-500/20 transition-colors" routerLink="/agents">Crie seu primeiro agente &rarr;</a>
+      <h2 class="text-xl font-bold text-white mb-2">Seu hub de agentes esta no ar</h2>
+      <p class="text-sm leading-relaxed mb-6">Crie um agente, abra uma sessao e acompanhe o fluxo de resposta em tempo real com memoria persistente.</p>
+
+      <a *ngIf="!hasAgents" class="inline-flex items-center px-4 py-2 font-semibold text-ui-200 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors" routerLink="/agents">Crie seu primeiro agente &rarr;</a>
     </div>
 
-    <!-- Spacer to guarantee view above absolute composer -->
     <div class="shrink-0 h-40 md:h-48 w-full pointer-events-none"></div>
   </div>
 
-  <!-- Composer Box (Docked inside section) -->
   <div class="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-ui-950 via-ui-950/90 to-transparent z-10 pt-16 pointer-events-none">
     <div class="max-w-4xl mx-auto flex flex-col gap-2 relative pointer-events-auto">
       <p *ngIf="error" class="text-red-400 text-sm font-medium animate-slide-up mb-1 px-2">{{ error }}</p>
-      
-      <div class="relative bg-ui-800/60 backdrop-blur-xl border border-ui-600/30 rounded-2xl shadow-xl overflow-hidden focus-within:border-brand-500/50 focus-within:ring-1 focus-within:ring-brand-500/50 transition-all duration-300">
+
+      <div class="relative bg-ui-800/60 backdrop-blur-xl border border-ui-600/30 rounded-2xl shadow-xl overflow-hidden focus-within:border-white/20 focus-within:ring-1 focus-within:ring-white/10 transition-all duration-300">
         <textarea
           [ngModel]="draft"
           (ngModelChange)="handleDraftChange($event)"
@@ -153,23 +145,23 @@
           rows="2"
           [disabled]="streaming || !hasAgent"
           class="w-full bg-transparent border-0 text-ui-100 placeholder-ui-500 px-5 py-4 resize-none focus:ring-0 text-sm min-h-[60px] max-h-[200px] custom-scrollbar"
-          placeholder="Envie uma instrução... (Enter para enviar, Shift+Enter para quebrar linha)"
+          placeholder="Envie uma instrucao... (Enter para enviar, Shift+Enter para quebrar linha)"
         ></textarea>
 
         <div class="absolute bottom-2 right-2">
-          <button class="bg-brand-600 hover:bg-brand-500 text-white rounded-xl p-2.5 shadow-lg flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed group focus:outline-none focus:ring-2 focus:ring-brand-500/50" 
-                  type="button" 
-                  [disabled]="streaming || !hasAgent || !draft.trim()" 
-                  (click)="send.emit()" 
+          <button class="bg-white text-ui-950 hover:bg-ui-100 rounded-xl p-2.5 shadow-lg flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed group focus:outline-none focus:ring-2 focus:ring-white/20"
+                  type="button"
+                  [disabled]="streaming || !hasAgent || !draft.trim()"
+                  (click)="send.emit()"
                   title="Enviar mensagem">
             <svg class="transition-transform group-hover:block" [class.hidden]="streaming" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
             <svg class="animate-spin hidden" [class.!block]="streaming" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
           </button>
         </div>
       </div>
-      
+
       <div class="text-center">
-        <span class="text-[0.65rem] text-ui-500 font-medium tracking-wide">Pressione <kbd class="px-1 py-0.5 rounded bg-ui-800 border border-ui-700">Enter</kbd> para enviar \u2022 <kbd class="px-1 py-0.5 rounded bg-ui-800 border border-ui-700">Shift</kbd> + <kbd class="px-1 py-0.5 rounded bg-ui-800 border border-ui-700">Enter</kbd> para pular linha</span>
+        <span class="text-[0.65rem] text-ui-500 font-medium tracking-wide">Pressione <kbd class="px-1 py-0.5 rounded bg-ui-800 border border-ui-700">Enter</kbd> para enviar • <kbd class="px-1 py-0.5 rounded bg-ui-800 border border-ui-700">Shift</kbd> + <kbd class="px-1 py-0.5 rounded bg-ui-800 border border-ui-700">Enter</kbd> para pular linha</span>
       </div>
     </div>
   </div>

@@ -151,7 +151,7 @@ h3 {
   border: 1px solid var(--stroke);
   border-radius: var(--radius);
   background:
-    linear-gradient(180deg, rgba(18, 28, 25, 0.84), rgba(8, 12, 11, 0.88)),
+    linear-gradient(180deg, rgba(18, 18, 22, 0.88), rgba(8, 8, 10, 0.92)),
     var(--surface-1);
   box-shadow: var(--shadow-soft);
 }
@@ -203,7 +203,7 @@ h3 {
   border: 1px solid transparent;
   border-radius: var(--radius);
   padding: 15px;
-  background: rgba(5, 9, 8, 0.44);
+  background: rgba(255, 255, 255, 0.025);
   color: inherit;
   text-align: left;
   display: grid;
@@ -213,15 +213,15 @@ h3 {
 
 .scenario-card:hover {
   transform: translateX(2px);
-  border-color: rgba(110, 231, 190, 0.2);
-  background: rgba(16, 27, 23, 0.74);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .scenario-card.active {
-  border-color: rgba(110, 231, 190, 0.28);
+  border-color: rgba(255, 255, 255, 0.14);
   background:
-    linear-gradient(90deg, rgba(59, 212, 168, 0.14), rgba(125, 211, 252, 0.05)),
-    rgba(11, 22, 18, 0.82);
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    rgba(16, 16, 22, 0.86);
 }
 
 .scenario-kind,
@@ -285,9 +285,9 @@ h3 {
 
 .winner-box {
   padding: 16px;
-  border: 1px solid rgba(110, 231, 190, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius);
-  background: rgba(5, 19, 15, 0.66);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .result-card {
