@@ -77,6 +77,32 @@ export const updateSessionRequestSchema = z.object({
 
 export const messageRoleSchema = z.enum(['system', 'user', 'assistant']);
 
+export const contextBudgetSectionSchema = z.object({
+  kind: z.enum(['agent_prompt', 'agent_memory', 'session_memory', 'tool_context', 'recent_history']),
+  label: z.string(),
+  usedTokens: z.number().int().nonnegative(),
+  chars: z.number().int().nonnegative(),
+  compacted: z.boolean()
+});
+
+export const contextBudgetSchema = z.object({
+  contextWindowTokens: z.number().int().positive(),
+  reservedResponseTokens: z.number().int().nonnegative(),
+  maxPromptTokens: z.number().int().positive(),
+  usedPromptTokens: z.number().int().nonnegative(),
+  remainingPromptTokens: z.number().int().nonnegative(),
+  usageRatio: z.number().min(0).max(1),
+  charsPerToken: z.number().int().positive(),
+  totalHistoryMessages: z.number().int().nonnegative(),
+  recentMessagesIncluded: z.number().int().nonnegative(),
+  recentMessagesDropped: z.number().int().nonnegative(),
+  summaryApplied: z.boolean(),
+  toolContextApplied: z.boolean(),
+  toolChunksUsed: z.number().int().nonnegative(),
+  compacted: z.boolean(),
+  sections: z.array(contextBudgetSectionSchema)
+});
+
 export const messageSchema = z.object({
   id: z.string().uuid(),
   sessionId: z.string().uuid(),
@@ -310,6 +336,8 @@ export type SessionDto = z.infer<typeof sessionSchema>;
 export type CreateSessionRequestDto = z.infer<typeof createSessionRequestSchema>;
 export type UpdateSessionRequestDto = z.infer<typeof updateSessionRequestSchema>;
 export type MessageDto = z.infer<typeof messageSchema>;
+export type ContextBudgetSectionDto = z.infer<typeof contextBudgetSectionSchema>;
+export type ContextBudgetDto = z.infer<typeof contextBudgetSchema>;
 export type ChatStreamRequestDto = z.infer<typeof chatStreamRequestSchema>;
 export type StreamChunkPayloadDto = z.infer<typeof streamChunkPayloadSchema>;
 export type KnowledgeSourceDto = z.infer<typeof knowledgeSourceSchema>;

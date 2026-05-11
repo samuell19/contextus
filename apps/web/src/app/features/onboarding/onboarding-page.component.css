@@ -1,1 +1,79 @@
-/* Integrado via Tailwind classes */
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+main {
+  min-height: 100vh;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 460px) !important;
+  gap: 18px !important;
+  padding: 18px !important;
+}
+
+main > section {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--stroke) !important;
+  background: rgba(12, 18, 16, 0.84) !important;
+  box-shadow: var(--shadow-soft);
+}
+
+main > section:first-child {
+  min-height: calc(100vh - 36px);
+  background:
+    linear-gradient(120deg, rgba(59, 212, 168, 0.12), transparent 42%),
+    linear-gradient(300deg, rgba(125, 211, 252, 0.09), transparent 36%),
+    linear-gradient(180deg, rgba(18, 28, 25, 0.92), rgba(5, 8, 7, 0.96)) !important;
+}
+
+p[class*='tracking'] {
+  color: var(--brand-strong) !important;
+  letter-spacing: 0.14em !important;
+}
+
+h1 {
+  color: var(--text) !important;
+  font-size: clamp(2.5rem, 5vw, 5rem) !important;
+  line-height: 0.95 !important;
+  letter-spacing: 0 !important;
+}
+
+h2 {
+  color: var(--text) !important;
+}
+
+p,
+span {
+  color: var(--muted);
+}
+
+article {
+  border-radius: var(--radius) !important;
+  border-color: rgba(183, 195, 189, 0.12) !important;
+  background: rgba(5, 9, 8, 0.48) !important;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+article:hover {
+  transform: translateY(-2px);
+  border-color: rgba(110, 231, 190, 0.24) !important;
+}
+
+main > section:last-child {
+  align-self: center;
+  background: linear-gradient(180deg, rgba(17, 25, 23, 0.92), rgba(8, 12, 11, 0.94)) !important;
+}
+
+textarea {
+  font-family: 'Inter', sans-serif;
+}
+
+@media (max-width: 1024px) {
+  main {
+    grid-template-columns: 1fr !important;
+  }
+
+  main > section:first-child {
+    min-height: auto;
+  }
+}

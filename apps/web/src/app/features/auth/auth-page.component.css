@@ -1,1 +1,112 @@
-/* Substituto pelas classes tailwind */
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+main {
+  min-height: 100vh;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 440px) !important;
+  gap: 18px !important;
+  padding: 18px !important;
+}
+
+main > section {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--stroke) !important;
+  background: rgba(12, 18, 16, 0.82) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+main > section:first-child {
+  min-height: calc(100vh - 36px);
+  background:
+    linear-gradient(135deg, rgba(59, 212, 168, 0.13), transparent 38%),
+    linear-gradient(315deg, rgba(246, 193, 119, 0.1), transparent 30%),
+    linear-gradient(180deg, rgba(18, 28, 25, 0.92), rgba(5, 8, 7, 0.96)) !important;
+}
+
+main > section:first-child::after {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius);
+}
+
+p[class*='tracking'] {
+  color: var(--brand-strong) !important;
+  letter-spacing: 0.14em !important;
+}
+
+h1 {
+  max-width: 12ch !important;
+  color: var(--text) !important;
+  font-size: clamp(2.8rem, 6vw, 5.7rem) !important;
+  line-height: 0.9 !important;
+  letter-spacing: 0 !important;
+}
+
+h2 {
+  color: var(--text) !important;
+  letter-spacing: 0 !important;
+}
+
+p {
+  color: var(--muted) !important;
+}
+
+article {
+  min-height: 118px !important;
+  border-radius: var(--radius) !important;
+  border-color: rgba(183, 195, 189, 0.12) !important;
+  background: rgba(4, 8, 7, 0.36) !important;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+article:hover {
+  transform: translateY(-2px);
+  border-color: rgba(110, 231, 190, 0.28) !important;
+  background: rgba(15, 27, 23, 0.62) !important;
+}
+
+article span {
+  color: var(--cyan) !important;
+}
+
+main > section:last-child {
+  align-self: center;
+  max-height: calc(100vh - 36px);
+  background:
+    linear-gradient(180deg, rgba(17, 25, 23, 0.92), rgba(8, 12, 11, 0.94)) !important;
+}
+
+main > section:last-child > div:nth-child(2) {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--stroke) !important;
+  background: rgba(5, 9, 8, 0.72) !important;
+}
+
+button {
+  border-radius: var(--radius) !important;
+}
+
+button[ng-reflect-ng-class],
+button[class*='bg-gradient'] {
+  background: rgba(18, 28, 25, 0.8) !important;
+}
+
+button[class*='shadow'] {
+  box-shadow: none !important;
+}
+
+@media (max-width: 1024px) {
+  main {
+    grid-template-columns: 1fr !important;
+  }
+
+  main > section:first-child {
+    min-height: auto;
+  }
+}

@@ -1,4 +1,4 @@
-import type { MessageDto } from '@multiagent/shared';
+import type { ContextBudgetDto, MessageDto } from '@multiagent/shared';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -20,6 +20,7 @@ export class ChatPanelComponent {
   @Input() public keyLast4: string | null = null;
   @Input() public chatStatusLabel = 'Aguardando';
   @Input() public chatStatusTone: 'success' | 'info' | 'warning' | 'neutral' = 'neutral';
+  @Input() public contextBudget: ContextBudgetDto | null = null;
   @Input() public messages: any[] = [];
   @Input() public draft = '';
   @Input() public streaming = false;
@@ -58,6 +59,56 @@ export class ChatPanelComponent {
     this.draftChange.emit(value);
   }
 
+  public contextUsagePercent() {
+    if (!this.contextBudget) {
+      return 0;
+    }
+
+    return Math.round(this.contextBudget.usageRatio * 100);
+  }
+
+  public contextUsageWidth() {
+    return `${this.contextUsagePercent()}%`;
+  }
+
+  public contextBudgetCopy() {
+    if (!this.contextBudget) {
+      return 'Sem leitura de contexto ainda';
+    }
+
+    return `${this.contextBudget.usedPromptTokens} / ${this.contextBudget.maxPromptTokens} tok de prompt`;
+  }
+
+  public contextIndicators() {
+    if (!this.contextBudget) {
+      return [];
+    }
+
+    const indicators: string[] = [];
+
+    if (this.contextBudget.summaryApplied) {
+      indicators.push('Resumo ativo');
+    }
+
+    if (this.contextBudget.recentMessagesIncluded > 0) {
+      indicators.push(`${this.contextBudget.recentMessagesIncluded} msg recentes`);
+    }
+
+    if (this.contextBudget.toolChunksUsed > 0) {
+      indicators.push(`RAG ${this.contextBudget.toolChunksUsed} chunks`);
+    }
+
+    if (this.contextBudget.recentMessagesDropped > 0) {
+      indicators.push(`Compactou ${this.contextBudget.recentMessagesDropped} msg`);
+    }
+
+    return indicators;
+  }
+
+  public hasContextCompaction() {
+    return Boolean(this.contextBudget?.compacted);
+  }
+
   private escapeHtml(input: string) {
     return input
       .replace(/&/g, '&amp;')
@@ -78,4 +129,3 @@ export class ChatPanelComponent {
     }, 50);
   }
 }
-

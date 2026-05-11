@@ -1,4 +1,4 @@
-import type { AgentDto, MessageDto, SessionDto } from '@multiagent/shared';
+import type { AgentDto, ContextBudgetDto, MessageDto, SessionDto } from '@multiagent/shared';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,6 +34,7 @@ export class ShellPageComponent implements OnInit {
   public readonly selectedSession = computed(
     () => this.sessions().find((session) => session.id === this.selectedSessionId()) ?? null
   );
+  public readonly contextBudget = signal<ContextBudgetDto | null>(null);
   public readonly chatStatusLabel = computed(() => {
     if (!this.auth.hasConfiguredKey()) {
       return 'Sem API key';
@@ -100,6 +101,7 @@ export class ShellPageComponent implements OnInit {
         if (!this.streaming()) void this.loadMessages(sessionId);
       } else {
         if (!this.streaming()) this.messages.set([]);
+        this.contextBudget.set(null);
       }
     });
   }
@@ -215,6 +217,11 @@ export class ShellPageComponent implements OnInit {
         sessionId,
         content,
         onEvent: (payload) => {
+          if (payload.event === 'context_budget') {
+            this.contextBudget.set(payload.data as ContextBudgetDto);
+            return;
+          }
+
           this.messages.update((current) =>
             current.map((msg) => {
               if (msg.id === tempAssistantId) {
@@ -296,6 +303,7 @@ export class ShellPageComponent implements OnInit {
       }
 
       this.messages.set(messages);
+      this.contextBudget.set(this.extractLatestContextBudget(messages));
     } catch (error) {
       this.error.set(error instanceof Error ? error.message : 'Falha ao carregar mensagens');
     }
@@ -309,5 +317,18 @@ export class ShellPageComponent implements OnInit {
     }
 
     return token;
+  }
+
+  private extractLatestContextBudget(messages: MessageDto[]) {
+    for (let index = messages.length - 1; index >= 0; index -= 1) {
+      const message = messages[index];
+      const contextBudget = message?.metadata?.['contextBudget'];
+
+      if (message?.role === 'assistant' && contextBudget) {
+        return contextBudget as ContextBudgetDto;
+      }
+    }
+
+    return null;
   }
 }

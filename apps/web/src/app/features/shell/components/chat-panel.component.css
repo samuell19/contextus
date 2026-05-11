@@ -1,1 +1,161 @@
-/* Estilos integrados via Tailwind Utility Classes */
+:host {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+}
+
+section {
+  margin: 14px !important;
+  border: 1px solid var(--stroke) !important;
+  border-radius: var(--radius) !important;
+  background:
+    linear-gradient(180deg, rgba(13, 20, 18, 0.9), rgba(5, 8, 7, 0.92)),
+    var(--surface-1) !important;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(110, 231, 190, 0.08), transparent),
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 42px;
+}
+
+header {
+  border-bottom: 1px solid var(--stroke) !important;
+  background: rgba(8, 13, 12, 0.82) !important;
+  backdrop-filter: blur(18px);
+}
+
+p[class*='tracking'] {
+  color: var(--brand-strong) !important;
+  letter-spacing: 0.14em !important;
+}
+
+h1 {
+  color: var(--text) !important;
+  letter-spacing: 0 !important;
+}
+
+p,
+small,
+span {
+  color: var(--muted);
+}
+
+header span[class*='rounded-full'] {
+  border-radius: 999px !important;
+  border-color: rgba(125, 211, 252, 0.22) !important;
+  background: rgba(8, 34, 42, 0.66) !important;
+  color: #bae6fd !important;
+}
+
+header + div[class*='border-b'] {
+  background: rgba(6, 10, 9, 0.72) !important;
+}
+
+article {
+  animation: messageIn 260ms ease both;
+}
+
+article > span {
+  color: var(--muted-2) !important;
+  letter-spacing: 0.12em !important;
+}
+
+article > div[class*='px-5'] {
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+article[class*='self-end'] > div[class*='px-5'] {
+  border: 1px solid rgba(110, 231, 190, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(59, 212, 168, 0.24), rgba(17, 80, 65, 0.34)),
+    rgba(10, 34, 28, 0.9) !important;
+}
+
+article[class*='self-start'] > div[class*='px-5'],
+article div[class*='bg-ui-800'] {
+  border: 1px solid rgba(183, 195, 189, 0.12) !important;
+  background: rgba(12, 18, 16, 0.82) !important;
+}
+
+details {
+  border-radius: var(--radius) !important;
+}
+
+summary {
+  border-radius: var(--radius) !important;
+}
+
+.prose {
+  color: var(--text-soft);
+}
+
+.prose :where(p, li) {
+  color: var(--text-soft);
+  line-height: 1.72;
+}
+
+.prose :where(code) {
+  border: 1px solid var(--stroke);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.34);
+  color: var(--brand-strong);
+  padding: 2px 5px;
+}
+
+.m-auto {
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  background: rgba(5, 9, 8, 0.48);
+}
+
+.m-auto > div {
+  border-radius: var(--radius) !important;
+  background: rgba(17, 28, 25, 0.74) !important;
+}
+
+section > div:last-child {
+  background: linear-gradient(180deg, transparent, rgba(5, 8, 7, 0.94) 36%, rgba(5, 8, 7, 0.99)) !important;
+}
+
+textarea {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.55;
+}
+
+textarea + div button {
+  border-radius: var(--radius) !important;
+  border: 1px solid rgba(110, 231, 190, 0.34);
+  background: rgba(16, 33, 28, 0.96) !important;
+  color: var(--brand-strong);
+}
+
+textarea + div button:hover {
+  background: rgba(22, 45, 38, 1) !important;
+}
+
+kbd {
+  border-radius: 5px !important;
+  border-color: rgba(183, 195, 189, 0.16) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: var(--text-soft);
+}
+
+@keyframes messageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

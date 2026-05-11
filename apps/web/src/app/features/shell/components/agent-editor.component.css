@@ -1,1 +1,51 @@
-/* Cleaned agent editor CSS */
+:host {
+  display: block;
+}
+
+section {
+  border: 1px solid var(--stroke) !important;
+  border-radius: var(--radius) !important;
+  background:
+    linear-gradient(180deg, rgba(18, 28, 25, 0.86), rgba(8, 12, 11, 0.92)) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+section > div:first-child,
+section > div:last-child {
+  border-color: var(--stroke) !important;
+}
+
+p[class*='tracking'] {
+  color: var(--brand-strong) !important;
+  letter-spacing: 0.14em !important;
+}
+
+h2 {
+  color: var(--text) !important;
+}
+
+label span {
+  color: var(--text-soft) !important;
+}
+
+label[class*='items-center'] {
+  border-radius: var(--radius) !important;
+  border-color: var(--stroke) !important;
+  background: rgba(5, 9, 8, 0.52) !important;
+}
+
+input[type='checkbox'] {
+  accent-color: var(--brand);
+}
+
+input[type='file'] {
+  border-radius: var(--radius) !important;
+  border-color: var(--stroke) !important;
+  background: rgba(5, 9, 8, 0.52) !important;
+}
+
+section > div:last-child p {
+  border-radius: var(--radius) !important;
+  background: rgba(5, 9, 8, 0.54) !important;
+  color: var(--muted) !important;
+}

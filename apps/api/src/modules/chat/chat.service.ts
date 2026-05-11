@@ -1,3 +1,5 @@
+import type { ContextBudgetDto } from '@multiagent/shared';
+
 import { env } from '../../config/env.js';
 import type {
   ContextAssembler,
@@ -8,6 +10,7 @@ import type {
 import { Agent, MemorySnapshot, Message, Session, UserApiCredential } from '../../models/index.js';
 import { AppError } from '../../common/http.js';
 import { CryptoService } from '../../services/crypto.service.js';
+import { ContextBudgetService } from '../../services/context-budget.service.js';
 import { ragMetricsService } from '../../services/rag-metrics.service.js';
 
 export class ChatService {
@@ -16,7 +19,8 @@ export class ChatService {
     private readonly contextAssembler: ContextAssembler,
     private readonly memoryService: MemoryServiceContract,
     private readonly cryptoService: CryptoService,
-    private readonly toolOrchestrator: ToolOrchestrator
+    private readonly toolOrchestrator: ToolOrchestrator,
+    private readonly contextBudgetService: ContextBudgetService
   ) {}
 
   public async streamReply(input: {
@@ -114,23 +118,48 @@ export class ChatService {
       .join('\n\n')
       .trim();
 
+    const toolChunksUsed = transientLogs.reduce((total, event) => {
+      if (event.event !== 'rag_chunks' || !Array.isArray(event.data)) {
+        return total;
+      }
+
+      return total + event.data.length;
+    }, 0);
+
+    const preparedContext = this.contextBudgetService.prepare({
+      agentPrompt: agent.systemPrompt,
+      agentMemorySummary: agentMemory?.summary ?? null,
+      sessionMemorySummary: sessionMemory?.summary ?? null,
+      toolContext: toolContext || null,
+      toolChunksUsed,
+      history: historyMessages.map((message) => ({
+        role: message.role,
+        content: message.content
+      }))
+    });
+
+    input.onEvent({
+      event: 'context_budget',
+      data: preparedContext.budget
+    });
+
     console.info('[CHAT] Tool context injection', {
       sessionId: session.id,
       hasToolContext: Boolean(toolContext),
-      chars: toolContext.length
+      chars: toolContext.length,
+      usedPromptTokens: preparedContext.budget.usedPromptTokens,
+      maxPromptTokens: preparedContext.budget.maxPromptTokens,
+      compacted: preparedContext.budget.compacted
     });
 
     let accumulated = '';
     const model = agent.defaultModelSlug || env.OPENROUTER_DEFAULT_MODEL;
     const assembled = this.contextAssembler.assemble({
-      agentPrompt: agent.systemPrompt,
-      agentMemorySummary: agentMemory?.summary ?? null,
-      sessionMemorySummary: sessionMemory?.summary ?? null,
-      toolContext: toolContext || null,
-      history: historyMessages.map((message) => ({
-        role: message.role,
-        content: message.content
-      }))
+      agentPrompt: preparedContext.agentPrompt,
+      agentMemorySummary: preparedContext.agentMemorySummary,
+      sessionMemorySummary: preparedContext.sessionMemorySummary,
+      toolContext: preparedContext.toolContext,
+      history: preparedContext.history
     });
 
     const answer = await this.gateway.streamChat({
@@ -147,7 +176,10 @@ export class ChatService {
       sessionId: session.id,
       role: 'assistant',
       content: answer,
-      metadata: transientLogs.length > 0 ? { ragLogs: transientLogs } : null
+      metadata: this.buildAssistantMetadata({
+        ragLogs: transientLogs,
+        contextBudget: preparedContext.budget
+      })
     });
 
     session.lastMessageAt = new Date();
@@ -176,5 +208,20 @@ export class ChatService {
     }
 
     return { assistantMessageId: assistantMessage.id, content: answer, userMessageId: userMessage.id };
+  }
+
+  private buildAssistantMetadata(input: {
+    ragLogs: Array<{ event: string; data?: any }>;
+    contextBudget: ContextBudgetDto;
+  }) {
+    const metadata: Record<string, unknown> = {
+      contextBudget: input.contextBudget
+    };
+
+    if (input.ragLogs.length > 0) {
+      metadata['ragLogs'] = input.ragLogs;
+    }
+
+    return metadata;
   }
 }

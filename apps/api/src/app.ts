@@ -18,6 +18,7 @@ import { createMetricsRouter } from './modules/metrics/metrics.routes.js';
 import { createSessionsRouter } from './modules/sessions/sessions.routes.js';
 import { DefaultContextAssembler } from './services/context-assembler.service.js';
 import { CryptoService } from './services/crypto.service.js';
+import { ContextBudgetService } from './services/context-budget.service.js';
 import { MemoryService } from './services/memory.service.js';
 import { OpenRouterGateway } from './services/openrouter.gateway.js';
 import { RagFileParserService } from './services/rag-file-parser.service.js';
@@ -34,11 +35,19 @@ export function createApp() {
   const storageService = new StorageService();
   const gateway = new OpenRouterGateway();
   const contextAssembler = new DefaultContextAssembler();
+  const contextBudgetService = new ContextBudgetService();
   const memoryService = new MemoryService(gateway);
   const ragService = new RagService();
   const ragFileParser = new RagFileParserService();
   const toolOrchestrator = new ToolOrchestratorService([new RagTool(ragService)]);
-  const chatService = new ChatService(gateway, contextAssembler, memoryService, cryptoService, toolOrchestrator);
+  const chatService = new ChatService(
+    gateway,
+    contextAssembler,
+    memoryService,
+    cryptoService,
+    toolOrchestrator,
+    contextBudgetService
+  );
   const evalLabService = new EvalLabService(gateway, cryptoService);
 
   app.use(

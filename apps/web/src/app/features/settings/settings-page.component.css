@@ -1,1 +1,91 @@
-/* CSS gerenciado nativamente pelo grid Tailwind na estrutura DOM */
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+main {
+  min-height: 100vh !important;
+  background: transparent !important;
+}
+
+main > div {
+  padding: 24px !important;
+}
+
+main > div > div {
+  display: none;
+}
+
+section.glass-panel {
+  max-width: 1060px !important;
+  border-radius: var(--radius) !important;
+  background:
+    linear-gradient(180deg, rgba(18, 28, 25, 0.86), rgba(8, 12, 11, 0.92)) !important;
+}
+
+p[class*='tracking'] {
+  color: var(--brand-strong) !important;
+  letter-spacing: 0.14em !important;
+}
+
+h1 {
+  color: var(--text) !important;
+  font-size: clamp(2.1rem, 4vw, 3.6rem) !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+}
+
+h2,
+strong {
+  color: var(--text) !important;
+}
+
+p,
+small,
+span {
+  color: var(--muted);
+}
+
+article,
+section section,
+div[class*='rounded-2xl'] {
+  border-radius: var(--radius) !important;
+}
+
+article {
+  border-color: var(--stroke) !important;
+  background: rgba(5, 9, 8, 0.52) !important;
+}
+
+section section {
+  border-color: var(--stroke) !important;
+  background: rgba(5, 9, 8, 0.44) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+textarea {
+  min-height: 120px;
+}
+
+button[class*='red'],
+button[class*='text-red'] {
+  border: 1px solid rgba(251, 113, 133, 0.18) !important;
+  border-radius: var(--radius) !important;
+  background: rgba(76, 18, 31, 0.42) !important;
+  color: #fecdd3 !important;
+}
+
+button[class*='red']:hover,
+button[class*='text-red']:hover {
+  background: rgba(113, 23, 44, 0.56) !important;
+}
+
+@media (max-width: 980px) {
+  main {
+    flex-direction: column !important;
+  }
+
+  app-workspace-nav {
+    width: 100% !important;
+  }
+}
